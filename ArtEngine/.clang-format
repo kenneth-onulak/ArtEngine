@@ -1,0 +1,8 @@
+---
+BasedOnStyle: Microsoft
+AlwaysBreakTemplateDeclarations: 'Yes'
+AllowAllConstructorInitializersOnNextLine: 'true'
+BreakConstructorInitializers: BeforeComma
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
+SortIncludes: 'false'
+...

@@ -1,0 +1,15 @@
+"C:\Program Files\JetBrains\CLion 2020.3.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - NMake Makefiles" D:\Experimentation\ArtEngine\ArtEngine
+CMake Warning at C:/Program Files/JetBrains/CLion 2020.3.3/bin/cmake/win/share/cmake-3.20/Modules/FindBoost.cmake:1354 (message):
+  New Boost version may have incorrect or missing dependencies and imported
+  targets
+Call Stack (most recent call first):
+  C:/Program Files/JetBrains/CLion 2020.3.3/bin/cmake/win/share/cmake-3.20/Modules/FindBoost.cmake:1476 (_Boost_COMPONENT_DEPENDENCIES)
+  C:/Program Files/JetBrains/CLion 2020.3.3/bin/cmake/win/share/cmake-3.20/Modules/FindBoost.cmake:2086 (_Boost_MISSING_DEPENDENCIES)
+  C:/dev/vcpkg/installed/x64-windows/share/boost/vcpkg-cmake-wrapper.cmake:11 (_find_package)
+  C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake:742 (include)
+  CMakeLists.txt:20 (find_package)
+
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug
