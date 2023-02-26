@@ -19,22 +19,19 @@ set( CMAKE_CXX_STANDARD 20 )           # C++ version
 #endif ( WIN32 )
 
 ################################################################################
+################################## START EDIT ##################################
 ################################################################################
-################################################################################
-# START EDIT
-
 # uncomment the line corresponding to the project you want to build
 
 #set( EXAMPLE_DIR examples/image )    # image
 set( EXAMPLE_DIR examples/scene )    # scene
 
-# END EDIT
 ################################################################################
-################################################################################
+################################### END EDIT ###################################
 ################################################################################
 
 ################################################################################
-# GLOB files
+# GLOB build files
 # engine files
 file( GLOB_RECURSE ENGINE CONFIG_DEPENDS include/*h include/*.cpp )
 # project files
@@ -59,7 +56,7 @@ add_executable( ${PROJECT}
                 )
 
 ################################################################################
-# link dependencies from vcpkg
+# link dependencies
 target_link_libraries( ${PROJECT} PRIVATE
                        GLEW::GLEW
                        glm::glm

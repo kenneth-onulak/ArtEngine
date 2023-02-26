@@ -1,7 +1,7 @@
 #include "../../include/pch.h"
 #include "../../include/ArtEngine.h"
 
-#include "model.h"
+#include "settings.h"
 
 int main(int argc, char *args[])
 {

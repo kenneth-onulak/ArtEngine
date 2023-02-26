@@ -41,13 +41,13 @@ void setup(){
 std::function<void()> eventHandler = [](){
 
   if(Art::event.key_down(SDLK_w))
-    scale *= 0.99;
-  if(Art::event.key_down(SDLK_s))
     scale /= 0.99;
-  if(Art::event.key_down(SDLK_d))
-    pos = glm::rotate(glm::mat4(1),  glm::radians(0.75f), up)*glm::vec4(pos, 1.0);
   if(Art::event.key_down(SDLK_a))
     pos = glm::rotate(glm::mat4(1), -glm::radians(0.75f), up)*glm::vec4(pos, 1.0);
+  if(Art::event.key_down(SDLK_s))
+    scale *= 0.99;
+  if(Art::event.key_down(SDLK_d))
+    pos = glm::rotate(glm::mat4(1),  glm::radians(0.75f), up)*glm::vec4(pos, 1.0);
 
   setup(); //Recompute (I know this shouldn't be called all the time, whatever lol)
 };
