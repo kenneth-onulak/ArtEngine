@@ -3,7 +3,7 @@ file(REMOVE_RECURSE
   "ArtEngine.exe.manifest"
   "ArtEngine.lib"
   "ArtEngine.pdb"
-  "CMakeFiles/ArtEngine.dir/examples/voronoi/main.cpp.obj"
+  "CMakeFiles/ArtEngine.dir/examples/scene/main.cpp.obj"
   "CMakeFiles/ArtEngine.dir/include/ArtEngine.cpp.obj"
   "CMakeFiles/ArtEngine.dir/include/event.cpp.obj"
   "CMakeFiles/ArtEngine.dir/include/helpers/camera.cpp.obj"

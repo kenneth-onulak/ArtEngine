@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "image.h"
+#include "../pch.h"
 
 namespace image
 {
@@ -22,10 +21,10 @@ void save(SDL_Surface *surface, std::string path)
 
 void save(Target target, std::string path)
 {
-    SDL_Surface *surface = SDL_CreateRGBSurface(0, target.width(), target.height(), 32, 0, 0, 0, 0);
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, target.m_width, target.m_height, 32, 0, 0, 0, 0);
     SDL_LockSurface(surface);
 
-    target.sample(surface->pixels, glm::vec2(0), glm::vec2(target.width(), target.height()));
+    target.sample(surface->pixels, glm::vec2(0), glm::vec2(target.m_width, target.m_height));
     SDL_UnlockSurface(surface);
     save(surface, path);
 

@@ -14,10 +14,6 @@ class Instance
     void render(GLenum mode = GL_TRIANGLE_STRIP);
     void render(GLenum mode, int size);
 
-    size_t size() const;
-    void size(size_t size);
-
-  private:
     Model *m_model;                                   //!< model pointer
     std::unordered_map<std::string, int> m_instances; //!< binding points of attributes
     size_t m_size;                                    //!< number of instances

@@ -75,8 +75,8 @@
 // ImGui
 #include <imgui.h>
 #include <imgui_internal.h>
-#include <imgui/imgui_impl_sdl.h>
-#include <imgui/imgui_impl_opengl3.h>
+#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 using Handle = std::function<void()>;
 
@@ -100,6 +100,5 @@ using Handle = std::function<void()>;
 #include "helpers/parse.h"
 #include "helpers/log.h"
 #include "helpers/image.h"
-
 
 #endif // ARTENGINE_PCH_H

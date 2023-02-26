@@ -65,17 +65,17 @@ int main(int argc, char *args[])
     Art::event.handler = camera::handler;
 
     Art::view.pipeline = [&]() {
+        Art::view.target(color::silver);
+
         cube_voronoi.use();
         cube_voronoi.uniform("vp", views);
         cube_voronoi.uniform("R", R);
         instance.render();
 
-        Art::view.target(color::silver);
-
         sphere.use();
         sphere.uniform("vp", camera::view_projection);
-        sphere.texture("voronoicolor", voronoi.texture());
-        sphere.texture("voronoidepth", voronoi.depth());
+        sphere.texture("voronoicolor", voronoi.m_texture);
+        sphere.texture("voronoidepth", voronoi.m_depth);
         icosahedron.render(GL_TRIANGLES);
     };
 

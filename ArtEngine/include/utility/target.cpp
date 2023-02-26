@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "target.h"
+#include "../pch.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //// TARGET
@@ -29,16 +28,6 @@ void Target::target(bool use_depth)
         glClear(GL_COLOR_BUFFER_BIT);
 }
 
-unsigned Target::width() const
-{
-    return m_width;
-}
-
-unsigned Target::height() const
-{
-    return m_height;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 //// BILLBOARD
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,16 +49,6 @@ Billboard::Billboard(SDL_Surface *surface)
     bind(m_texture, false);
 }
 
-Texture Billboard::texture() const
-{
-    return m_texture;
-}
-
-Texture Billboard::depth() const
-{
-    return m_depth;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 //// CUBEMAP
 ////////////////////////////////////////////////////////////////////////////////
@@ -82,14 +61,4 @@ Cubemap::Cubemap(int width, int height, bool color, bool depth)
     if (m_color_attach)
         m_texture.empty(m_width, m_height);
     setup(m_texture, m_depth);
-}
-
-Cubetexture Cubemap::texture() const
-{
-    return m_texture;
-}
-
-Cubetexture Cubemap::depth() const
-{
-    return m_depth;
 }

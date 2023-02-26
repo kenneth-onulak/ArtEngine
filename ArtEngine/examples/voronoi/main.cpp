@@ -46,7 +46,7 @@ int main(int argc, char *args[])
 
     // Setup Window
     Art::view.vsync(false);
-    Art::window("GPU Accelerated Voronoise", _SIZE_, _SIZE_);
+    Art::window("GPU Accelerated Voronoi", _SIZE_, _SIZE_);
 
     Art::event.handler = []() {}; // eventHandler;
     Art::view.interface = interfaceFunc;
@@ -112,15 +112,15 @@ int main(int argc, char *args[])
         us = (float)((us * n + duration.count()) / (n + 1));
         n++;
 
-        std::cout << "Average Execution Time: " << us << std::endl; // Comment out for less spam
+        //std::cout << "Average Execution Time: " << us << std::endl; // Comment out for less spam
 
-        Art::view.target(color::silver); // Target Screen
+         Art::view.target(color::silver); // Target Screen
 
         // Pick a shader, pass textures, render as a quad.
         if (drawstyle == 3)
         {
             bubble.use();
-            bubble.texture("voronoi", billboard.texture());
+            bubble.texture("voronoi", billboard.m_texture);
             bubble.texture("image", tex);
             bubble.uniform("R", R);
             bubble.uniform("model", flat.model);
@@ -130,7 +130,7 @@ int main(int argc, char *args[])
         else if (drawstyle == 2)
         {
             mosaic.use();
-            mosaic.texture("voronoi", billboard.texture());
+            mosaic.texture("voronoi", billboard.m_texture);
             mosaic.texture("image", tex);
             mosaic.uniform("R", R);
             mosaic.uniform("model", flat.model);
@@ -140,7 +140,7 @@ int main(int argc, char *args[])
         else
         {
             billboardshader.use();
-            billboardshader.texture("imageTexture", billboard.texture());
+            billboardshader.texture("imageTexture", billboard.m_texture);
             billboardshader.uniform("model", flat.model);
             flat.render();
         }
@@ -167,7 +167,7 @@ int main(int argc, char *args[])
         if (updated)
         { // Update the data in the buffers!
             centroidbuf.fill<glm::vec2>(centroids);
-            instance.size(centroids.size());
+            instance.m_size = centroids.size();
             updated = false;
         }
     });

@@ -19,10 +19,6 @@ class Target
     template <typename T>
     void sample(T *n, glm::vec2 p, glm::vec2 d, GLenum attach = GL_COLOR_BUFFER_BIT, GLenum format = GL_RGBA);
 
-    unsigned width() const;
-    unsigned height() const;
-
-  protected:
     unsigned int m_width;        //!< framebuffer width
     unsigned int m_height;       //!< framebuffer height
     bool m_depth_attach = false; //!< use depth attachment
@@ -35,9 +31,9 @@ template <typename T>
 void Target::bind(T &texture, bool use_depth)
 {
     if (use_depth)
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture.texture(), 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture.m_texture, 0);
     else
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.texture(), 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.m_texture, 0);
 }
 
 template <typename T>
@@ -89,10 +85,6 @@ class Billboard : public Target
     Billboard(int width, int height, bool use_color = true, bool use_depth = true);
     Billboard(SDL_Surface* surface);
 
-    Texture texture() const;
-    Texture depth() const;
-
-  private:
     Texture m_texture;
     Texture m_depth;
 
@@ -107,10 +99,6 @@ class Cubemap : public Target
   public:
     Cubemap(int width, int height, bool color = true, bool depth = true);
 
-    Cubetexture texture() const;
-    Cubetexture depth() const;
-
-  private:
     Cubetexture m_texture;
     Cubetexture m_depth;
 

@@ -143,7 +143,7 @@ template <typename T>
 void ShaderBase::texture(std::string name, const T &texture)
 {
     glActiveTexture(GL_TEXTURE0 + m_bound_textures);
-    glBindTexture(texture.type(), texture.texture());
+    glBindTexture(texture.m_type, texture.m_texture);
     uniform(name, m_bound_textures++);
 }
 

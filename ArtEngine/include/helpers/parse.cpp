@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "parse.h"
+#include "../pch.h"
 
 namespace parse
 {

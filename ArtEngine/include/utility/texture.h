@@ -22,10 +22,6 @@ class Texture
     void depth(int width, int height, tfunc param = parameter);
     void raw(SDL_Surface *surface, tfunc param = parameter);
 
-    GLuint texture() const;
-    GLenum type() const;
-
-  protected:
     GLuint m_texture;              //!< texture location
     GLenum m_type = GL_TEXTURE_2D; //!< texture type
 

@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "object.h"
+#include "../pch.h"
 
 namespace object
 {
@@ -24,7 +23,7 @@ std::unordered_map<std::string, glm::vec3> materials(std::string file)
         if (line[0] == '#')
             continue;
 
-        if (line.substr(0, 2) == "newmtl")
+        if (line.substr(0, 6) == "newmtl")
             material_name = line.substr(7);
         else if (line.substr(0, 2) == "Kd")
         {
@@ -119,16 +118,16 @@ Model *load(std::string file)
             }
             else // parse face data normally
             {
-                int n = sscanf_s(line.substr(2).c_str(), "%d/%d/%d %d/%d/%d/ %d/%d/%d\n", //
-                                 &vi[0], &ui[0], &ni[0],                                  //
-                                 &vi[1], &ui[1], &ni[1],                                  //
+                int n = sscanf_s(line.substr(2).c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d\n", //
+                                 &vi[0], &ui[0], &ni[0],                                 //
+                                 &vi[1], &ui[1], &ni[1],                                 //
                                  &vi[2], &ui[2], &ni[2]);
                 if (n != 9)
                 {
-                    n = scanf_s(line.substr(2).c_str(), "-%d//-%d -%d//-%d -%d//-%d\n", //
-                                &vi[0], &ni[0],                                         //
-                                &vi[1], &ni[1],                                         //
-                                &vi[2], &ni[2]);
+                    n = sscanf_s(line.substr(2).c_str(), "-%d//-%d -%d//-%d -%d//-%d\n", //
+                                 &vi[0], &ni[0],                                         //
+                                 &vi[1], &ni[1],                                         //
+                                 &vi[2], &ni[2]);
                     if (n != 6)
                     {
                         std::cout << "Error: Face data could not be read correctly." << std::endl;
@@ -179,13 +178,42 @@ Model *load(std::string file)
 
     in.close();
 
+    // convert the file to the name of the object
+    auto index = file.find_last_of("/");
+    if (index != std::string::npos)
+        file = file.substr(index + 1);
+
     // construct the model from the buffer data
-    Model *model = new Model({"in_Position", "in_Normal", "in_Color"});
+    Model *model = new Model({"in_Position", "in_Normal", "in_Color"}, file);
     model->bind<glm::vec3>("in_Position", new Buffer(positions), true);
     model->bind<glm::vec3>("in_Normal", new Buffer(normals), true);
     model->bind<glm::vec4>("in_Color", new Buffer(colors), true);
     model->size = positions.size() / 3;
     return model;
+}
+
+std::vector<Model *> load_all(std::string file)
+{
+    std::ifstream in(file + ".txt", std::ios::in);
+    if (!in.is_open())
+    {
+        std::cout << "Error: Failed to open file " << file << ".txt" << std::endl;
+        return {};
+    }
+
+    std::vector<Model *> models;
+    std::string line;
+
+    while (std::getline(in, line))
+    {
+        Model *model = load(line.substr(0, line.length() - 4));
+        if (!model)
+            continue;
+        models.push_back(model);
+    }
+
+    in.close();
+    return models;
 }
 
 } // namespace object

@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "texture.h"
+#include "../pch.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //// TEXTURE
@@ -56,16 +55,6 @@ void Texture::raw(SDL_Surface *surface, tfunc param)
     glTexImage2D(m_type, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
     param(this);
     SDL_FreeSurface(surface);
-}
-
-GLuint Texture::texture() const
-{
-    return m_texture;
-}
-
-GLenum Texture::type() const
-{
-    return m_type;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

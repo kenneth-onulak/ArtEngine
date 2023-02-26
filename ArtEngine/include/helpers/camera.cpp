@@ -20,9 +20,7 @@
  Copyright (c) 2023 Kenneth Onulak Jr.
  MIT License
 **************************************************************************//*+*/
-#include "pch.h"
-#include "camera.h"
-
+#include "../pch.h"
 #include "../ArtEngine.h"
 
 namespace camera

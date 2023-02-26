@@ -47,7 +47,8 @@ std::function<void()> interfaceFunc = [](){
   ImGui::RadioButton("LTwist", &f, 2);
   metric = f;
 
-  ImGui::SliderFloat("Centroids", &K, 256, 16*1024);
+  ImGui::SliderFloat("Centroidss", &K, 256, 16*1024);
+
   if(ImGui::Button("Re-Seed")){
     centroids.clear();
     offset.clear();

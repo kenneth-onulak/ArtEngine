@@ -16,7 +16,6 @@
  MIT License
 **************************************************************************//*+*/
 #include "pch.h"
-#include "ArtEngine.h"
 
 namespace Art
 {

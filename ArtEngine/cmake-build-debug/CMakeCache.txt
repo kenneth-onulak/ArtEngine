@@ -20,50 +20,11 @@ ArtEngine_BINARY_DIR:STATIC=D:/Experimentation/ArtEngine/ArtEngine/cmake-build-d
 //Value Computed by CMake
 ArtEngine_SOURCE_DIR:STATIC=D:/Experimentation/ArtEngine/ArtEngine
 
-//Value Computed by CMake
-Art_Engine_BINARY_DIR:STATIC=D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug
-
-//Value Computed by CMake
-Art_Engine_SOURCE_DIR:STATIC=D:/Experimentation/ArtEngine/ArtEngine
-
-//Boost atomic library (debug)
-Boost_ATOMIC_LIBRARY_DEBUG:FILEPATH=C:/dev/vcpkg/installed/x64-windows/debug/lib/boost_atomic-vc140-mt-gd.lib
-
-//Boost atomic library (release)
-Boost_ATOMIC_LIBRARY_RELEASE:FILEPATH=C:/dev/vcpkg/installed/x64-windows/lib/boost_atomic-vc140-mt.lib
-
-//Boost chrono library (debug)
-Boost_CHRONO_LIBRARY_DEBUG:FILEPATH=C:/dev/vcpkg/installed/x64-windows/debug/lib/boost_chrono-vc140-mt-gd.lib
-
-//Boost chrono library (release)
-Boost_CHRONO_LIBRARY_RELEASE:FILEPATH=C:/dev/vcpkg/installed/x64-windows/lib/boost_chrono-vc140-mt.lib
-
-//Boost context library (debug)
-Boost_CONTEXT_LIBRARY_DEBUG:FILEPATH=C:/dev/vcpkg/installed/x64-windows/debug/lib/boost_context-vc140-mt-gd.lib
-
-//Boost context library (release)
-Boost_CONTEXT_LIBRARY_RELEASE:FILEPATH=C:/dev/vcpkg/installed/x64-windows/lib/boost_context-vc140-mt.lib
-
-//Boost date_time library (debug)
-Boost_DATE_TIME_LIBRARY_DEBUG:FILEPATH=C:/dev/vcpkg/installed/x64-windows/debug/lib/boost_date_time-vc140-mt-gd.lib
-
-//Boost date_time library (release)
-Boost_DATE_TIME_LIBRARY_RELEASE:FILEPATH=C:/dev/vcpkg/installed/x64-windows/lib/boost_date_time-vc140-mt.lib
-
-//The directory containing a CMake configuration file for Boost.
-Boost_DIR:PATH=Boost_DIR-NOTFOUND
-
 //Boost filesystem library (debug)
 Boost_FILESYSTEM_LIBRARY_DEBUG:FILEPATH=C:/dev/vcpkg/installed/x64-windows/debug/lib/boost_filesystem-vc140-mt-gd.lib
 
 //Boost filesystem library (release)
 Boost_FILESYSTEM_LIBRARY_RELEASE:FILEPATH=C:/dev/vcpkg/installed/x64-windows/lib/boost_filesystem-vc140-mt.lib
-
-//Boost file_system library (debug)
-Boost_FILE_SYSTEM_LIBRARY_DEBUG:FILEPATH=Boost_FILE_SYSTEM_LIBRARY_DEBUG-NOTFOUND
-
-//Boost file_system library (release)
-Boost_FILE_SYSTEM_LIBRARY_RELEASE:FILEPATH=Boost_FILE_SYSTEM_LIBRARY_RELEASE-NOTFOUND
 
 //Path to a file.
 Boost_INCLUDE_DIR:PATH=C:/dev/vcpkg/installed/x64-windows/include
@@ -73,12 +34,6 @@ Boost_LIBRARY_DIR_DEBUG:PATH=C:/dev/vcpkg/installed/x64-windows/debug/lib
 
 //Boost library directory RELEASE
 Boost_LIBRARY_DIR_RELEASE:PATH=C:/dev/vcpkg/installed/x64-windows/lib
-
-//Boost thread library (debug)
-Boost_THREAD_LIBRARY_DEBUG:FILEPATH=C:/dev/vcpkg/installed/x64-windows/debug/lib/boost_thread-vc140-mt-gd.lib
-
-//Boost thread library (release)
-Boost_THREAD_LIBRARY_RELEASE:FILEPATH=C:/dev/vcpkg/installed/x64-windows/lib/boost_thread-vc140-mt.lib
 
 //Path to a program.
 CMAKE_AR:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/lib.exe
@@ -162,7 +117,7 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=/INCREMENTAL:NO
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=/debug /INCREMENTAL
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/Art_Engine
+CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/ArtEngine
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/link.exe
@@ -291,6 +246,9 @@ FREETYPE_LIBRARY_RELEASE:FILEPATH=C:/dev/vcpkg/installed/x64-windows/lib/freetyp
 //The directory containing a CMake configuration file for GLEW.
 GLEW_DIR:PATH=C:/dev/vcpkg/installed/x64-windows/share/glew
 
+//Path to a file.
+GLEW_INCLUDE_DIR:PATH=C:/dev/vcpkg/installed/x64-windows/include
+
 //The directory containing a CMake configuration file for SDL2.
 SDL2_DIR:PATH=C:/dev/vcpkg/installed/x64-windows/share/sdl2
 
@@ -354,40 +312,16 @@ sdl2-ttf_DIR:PATH=C:/dev/vcpkg/installed/x64-windows/share/sdl2-ttf
 # INTERNAL cache entries
 ########################
 
-//ADVANCED property for variable: Boost_ATOMIC_LIBRARY_DEBUG
-Boost_ATOMIC_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_ATOMIC_LIBRARY_RELEASE
-Boost_ATOMIC_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_CHRONO_LIBRARY_DEBUG
-Boost_CHRONO_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_CHRONO_LIBRARY_RELEASE
-Boost_CHRONO_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_CONTEXT_LIBRARY_DEBUG
-Boost_CONTEXT_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_CONTEXT_LIBRARY_RELEASE
-Boost_CONTEXT_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_DATE_TIME_LIBRARY_DEBUG
-Boost_DATE_TIME_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_DATE_TIME_LIBRARY_RELEASE
-Boost_DATE_TIME_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_FILESYSTEM_LIBRARY_DEBUG
 Boost_FILESYSTEM_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_FILESYSTEM_LIBRARY_RELEASE
 Boost_FILESYSTEM_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_FILE_SYSTEM_LIBRARY_DEBUG
-Boost_FILE_SYSTEM_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_FILE_SYSTEM_LIBRARY_RELEASE
-Boost_FILE_SYSTEM_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_INCLUDE_DIR
 Boost_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_LIBRARY_DIR_DEBUG
 Boost_LIBRARY_DIR_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Boost_LIBRARY_DIR_RELEASE
 Boost_LIBRARY_DIR_RELEASE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_THREAD_LIBRARY_DEBUG
-Boost_THREAD_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: Boost_THREAD_LIBRARY_RELEASE
-Boost_THREAD_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
 //This is the directory where this CMakeCache.txt was created
@@ -460,8 +394,6 @@ CMAKE_GENERATOR_INSTANCE:INTERNAL=
 CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
-//Have include pthread.h
-CMAKE_HAVE_PTHREAD_H:INTERNAL=
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=D:/Experimentation/ArtEngine/ArtEngine
@@ -534,8 +466,6 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[C:/dev/vcpkg/installed/x64-windows/include][cfound components: filesystem ][v1.77.0()]
 //Details about finding Freetype
 FIND_PACKAGE_MESSAGE_DETAILS_Freetype:INTERNAL=[optimized;C:/dev/vcpkg/installed/x64-windows/lib/freetype.lib;debug;C:/dev/vcpkg/installed/x64-windows/debug/lib/freetyped.lib][C:/dev/vcpkg/installed/x64-windows/include][v2.11.0()]
-//Details about finding Threads
-FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //ADVANCED property for variable: FREETYPE_INCLUDE_DIR_freetype2
 FREETYPE_INCLUDE_DIR_freetype2-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: FREETYPE_INCLUDE_DIR_ft2build
@@ -561,7 +491,7 @@ Z_VCPKG_ROOT_DIR:INTERNAL=C:/dev/vcpkg
 //Last used Boost_COMPILER value.
 _Boost_COMPILER_LAST:INTERNAL=-vc140
 //Components requested for this build tree.
-_Boost_COMPONENTS_SEARCHED:INTERNAL=atomic;chrono;context;date_time;filesystem;thread
+_Boost_COMPONENTS_SEARCHED:INTERNAL=filesystem
 //Last used Boost_INCLUDE_DIR value.
 _Boost_INCLUDE_DIR_LAST:INTERNAL=C:/dev/vcpkg/installed/x64-windows/include
 //Last used Boost_LIBRARY_DIR_DEBUG value.

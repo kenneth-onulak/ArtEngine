@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "buffer.h"
+#include "../pch.h"
 
 Buffer::Buffer()
 {

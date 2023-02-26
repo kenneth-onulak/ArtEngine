@@ -67,6 +67,7 @@ class Event
     [[nodiscard]] bool quit() const;
     void quit(bool quit);
     [[nodiscard]] bool key_down(SDL_Keycode key);
+    [[nodiscard]] SDL_KeyCode key_up() const;
     [[nodiscard]] Scroll scroll() const;
     [[nodiscard]] bool resize_window() const;
 

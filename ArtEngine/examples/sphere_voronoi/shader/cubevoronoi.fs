@@ -23,8 +23,8 @@ float GEODESIC(vec3 a, vec3 b){
 
 void main(){
 
-  // gl_FragDepth = L1(ex_Quad, ex_Centroid);
-  // gl_FragDepth = L1(ex_Quad, ex_Centroid);
+//   gl_FragDepth = L1(ex_Quad, ex_Centroid);
+//   gl_FragDepth = L1(ex_Quad, ex_Centroid);
   gl_FragDepth = GEODESIC(ex_Quad, ex_Centroid)/R;
 
   fragColor = vec4(ex_Color, 1);

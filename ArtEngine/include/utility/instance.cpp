@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "instance.h"
+#include "../pch.h"
 
 Instance::Instance(Model *model)
     : m_model(model)
@@ -21,14 +20,4 @@ void Instance::render(GLenum mode, int size)
 void Instance::render(GLenum mode)
 {
     render(mode, m_size);
-}
-
-size_t Instance::size() const
-{
-    return m_size;
-}
-
-void Instance::size(size_t size)
-{
-    m_size = size;
 }

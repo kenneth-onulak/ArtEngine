@@ -27,7 +27,6 @@
  MIT License
 **************************************************************************//*+*/
 #include "pch.h"
-#include "view.h"
 
 /*M+M***********************************************************************//*!
  \method:   View::init
@@ -86,7 +85,7 @@ bool View::init(std::string window_name, int width, int height)
     ImGui::CreateContext();
     m_io = ImGui::GetIO();
     ImGui_ImplSDL2_InitForOpenGL(m_window, m_context);
-    ImGui_ImplOpenGL3_Init("#version 330 core");
+    ImGui_ImplOpenGL3_Init("#version 330");
     ImGui::StyleColorsDark();
 
     if (m_anti_alias)

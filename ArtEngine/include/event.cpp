@@ -22,7 +22,6 @@
  MIT License
 **************************************************************************//*+*/
 #include "pch.h"
-#include "event.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //// SCROLL STRUCT
@@ -189,6 +188,14 @@ void Event::quit(bool quit)
 bool Event::key_down(SDL_Keycode key)
 {
     return m_key_down[key];
+}
+
+SDL_KeyCode Event::key_up() const
+{
+    if (!m_key_up.empty())
+        return m_key_up.back();
+    else
+        return SDLK_UNKNOWN;
 }
 
 /*M+M***********************************************************************//*!

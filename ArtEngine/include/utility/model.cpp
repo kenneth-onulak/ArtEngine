@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "model.h"
+#include "../pch.h"
 
 Model::Model()
 {
@@ -26,7 +25,7 @@ Model::~Model()
 
  \modifies: [bindings]
  ************************************************************************//*M-M*/
-Model::Model(std::vector<std::string> binding)
+Model::Model(std::vector<std::string> binding, std::string name)
     : Model()
 {
     for (auto const &b : binding)
@@ -34,6 +33,7 @@ Model::Model(std::vector<std::string> binding)
         bindings[b] = bindings.size();          // provide the named binding point an index
         glEnableVertexAttribArray(bindings[b]); // enable the binding point
     }
+    this->name = name;
 }
 
 void Model::index(Buffer *buffer, bool owned)
@@ -62,7 +62,7 @@ void Model::render(GLenum mode)
 ////////////////////////////////////////////////////////////////////////////////
 
 Point::Point()
-    : Model({"vert"})
+    : Model({"vert"}, "point")
     , vertex({0.0f, 0.0f, 0.0f}) // single (x, y, z) point
 {
     bind<glm::vec3>("vert", &vertex);
@@ -74,7 +74,7 @@ Point::Point()
 ////////////////////////////////////////////////////////////////////////////////
 
 Triangle::Triangle()
-    : Model({"vert"})
+    : Model({"vert"}, "triangle")
     , vertex({1.0f, 0.0f, 0.0f, 0.0f,  // 0 - 4 (x, y, z, w) points
               0.0f, 1.0f, 0.0f, 0.0f,  // 1
               0.0f, 0.0f, 1.0f, 0.0f,  // 2
@@ -90,7 +90,7 @@ Triangle::Triangle()
 ////////////////////////////////////////////////////////////////////////////////
 
 Square2D::Square2D()
-    : Model({"in_Quad", "in_Tex"})
+    : Model({"in_Quad", "in_Tex"}, "square_2D")
     , vertex({-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f}) // 4 (x, y) points
     , texture({0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f})    // 4 (x, y) points
 {
@@ -104,7 +104,7 @@ Square2D::Square2D()
 ////////////////////////////////////////////////////////////////////////////////
 
 Square3D::Square3D()
-    : Model({"in_Quad", "in_Text"})
+    : Model({"in_Quad", "in_Text"}, "square_3D")
     , vertex({-1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f}) // 4 (x, y, z) points
     , texture({0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f})                            // 4 (x, y) points
 {
@@ -118,7 +118,7 @@ Square3D::Square3D()
 ////////////////////////////////////////////////////////////////////////////////
 
 Cube::Cube()
-    : Model({"in_Quad", "in_Tex"})
+    : Model({"in_Quad", "in_Tex"}, "cube")
     , vertex({
           1.0f,  -1.0f, 1.0f,  1.0f,  1.0f,  1.0f,  -1.0f, 1.0f,  1.0f,  // front 36 (x, y, z) points
           -1.0f, 1.0f,  1.0f,  -1.0f, -1.0f, 1.0f,  1.0f,  -1.0f, 1.0f,  //
@@ -145,7 +145,7 @@ Cube::Cube()
 ////////////////////////////////////////////////////////////////////////////////
 
 Gizmo::Gizmo()
-    : Model({"in_Quad", "in_Tex"})
+    : Model({"in_Quad", "in_Tex"}, "gizmo")
     , vertex({0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // 6 (x, y, z) points
               0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, //
               0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f})
@@ -163,7 +163,7 @@ Gizmo::Gizmo()
 ////////////////////////////////////////////////////////////////////////////////
 
 Icosphere::Icosphere()
-    : Model({"in_Position", "in_Tex"})
+    : Model({"in_Position", "in_Tex"}, "icosphere")
 {
     build();
     split();

@@ -3,27 +3,23 @@
 
 struct Model
 {
-    GLuint vao;      //!< vertex array
-    size_t size = 0; //!< number of vertices
-
-    std::unordered_map<std::string, int> bindings;     //!< binding points of attributes
-    std::unordered_map<std::string, Buffer *> buffers; //!< owned buffers
-
     Model();
     ~Model();
-    Model(std::vector<std::string> binding);
+    Model(std::vector<std::string> binding, std::string name = "none");
 
     template <typename T>
     void bind(std::string binding, Buffer *buffer, bool owned = false);
+    void index(Buffer *buffer, bool owned = false);
+    void render(GLenum mode = GL_TRIANGLE_STRIP);
 
+    GLuint vao; //!< vertex array
     GLuint idx;
     bool indexed = false;
-
-    void index(Buffer *buffer, bool owned = false);
-
-    glm::mat4 model = glm::mat4(1.0f); //!< model matrix
-
-    void render(GLenum mode = GL_TRIANGLE_STRIP);
+    size_t size = 0;                                   //!< number of vertices
+    glm::mat4 model = glm::mat4(1.0f);                 //!< model matrix
+    std::unordered_map<std::string, int> bindings;     //!< binding points of attributes
+    std::unordered_map<std::string, Buffer *> buffers; //!< owned buffers
+    std::string name; //!< model name
 
 }; // struct Model
 

@@ -19,13 +19,10 @@ vec3 color(int i){
 void main(){
 
   // Normalize the Centroid on the Sphere
-
   g_Centroid = normalize(in_Centroid);
 
-  // Compute the Sideways, Upways Direction for the Flat
-
+  // Compute the Sideways, Up-ways Direction for the Flat
   // Reference Direction
-
   vec3 d = vec3(0,1,0);
   if(abs(in_Centroid.y) > 0.8)
     d = vec3(0,0,1);
@@ -34,7 +31,6 @@ void main(){
   vec3 py = normalize(cross(in_Centroid, px));
 
   // Orient the Quad Correctly!
-
   g_Quad = R*(in_Quad.x*px + in_Quad.y*py) + in_Centroid;
   g_Color = color(gl_InstanceID);
 

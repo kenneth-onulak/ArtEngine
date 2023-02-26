@@ -50,24 +50,24 @@ The CXX compiler identification is MSVC, found in "D:/Experimentation/ArtEngine/
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):nmake -f Makefile /nologo cmTC_1de4a\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\nmake.exe"  -f CMakeFiles\cmTC_1de4a.dir\build.make /nologo -L                  CMakeFiles\cmTC_1de4a.dir\build
-Building C object CMakeFiles/cmTC_1de4a.dir/CMakeCCompilerABI.c.obj
-	"C:\Program Files\JetBrains\CLion 2020.3.3\bin\cmake\win\bin\cmake.exe" -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_1de4a.dir\CMakeCCompilerABI.c.obj.d --working-dir=D:\Experimentation\ArtEngine\ArtEngine\cmake-build-debug\CMakeFiles\CMakeTmp --filter-prefix="" -- C:\PROGRA~2\MICROS~3\2019\COMMUN~1\VC\Tools\MSVC\1429~1.301\bin\Hostx64\x64\cl.exe @C:\Users\kenne\AppData\Local\Temp\nmD4C6.tmp
-Linking C executable cmTC_1de4a.exe
-	"C:\Program Files\JetBrains\CLion 2020.3.3\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_1de4a.dir --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100190~1.0\x64\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100190~1.0\x64\mt.exe --manifests -- C:\PROGRA~2\MICROS~3\2019\COMMUN~1\VC\Tools\MSVC\1429~1.301\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_1de4a.dir\objects1.rsp @C:\Users\kenne\AppData\Local\Temp\nmD515.tmp
-	echo >nul && "C:\Program Files\PowerShell\7\pwsh.exe" -noprofile -executionpolicy Bypass -file C:/dev/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/CMakeTmp/cmTC_1de4a.exe -installedDir C:/dev/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+Run Build Command(s):nmake -f Makefile /nologo cmTC_57825\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\nmake.exe"  -f CMakeFiles\cmTC_57825.dir\build.make /nologo -L                  CMakeFiles\cmTC_57825.dir\build
+Building C object CMakeFiles/cmTC_57825.dir/CMakeCCompilerABI.c.obj
+	"C:\Program Files\JetBrains\CLion 2020.3.3\bin\cmake\win\bin\cmake.exe" -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_57825.dir\CMakeCCompilerABI.c.obj.d --working-dir=D:\Experimentation\ArtEngine\ArtEngine\cmake-build-debug\CMakeFiles\CMakeTmp --filter-prefix="" -- C:\PROGRA~2\MICROS~3\2019\COMMUN~1\VC\Tools\MSVC\1429~1.301\bin\Hostx64\x64\cl.exe @C:\Users\kenne\AppData\Local\Temp\nm41C3.tmp
+Linking C executable cmTC_57825.exe
+	"C:\Program Files\JetBrains\CLion 2020.3.3\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_57825.dir --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100190~1.0\x64\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100190~1.0\x64\mt.exe --manifests -- C:\PROGRA~2\MICROS~3\2019\COMMUN~1\VC\Tools\MSVC\1429~1.301\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_57825.dir\objects1.rsp @C:\Users\kenne\AppData\Local\Temp\nm4212.tmp
+	echo >nul && "C:\Program Files\PowerShell\7\pwsh.exe" -noprofile -executionpolicy Bypass -file C:/dev/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/CMakeTmp/cmTC_57825.exe -installedDir C:/dev/vcpkg/installed/x64-windows/debug/bin -OutVariable out
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):nmake -f Makefile /nologo cmTC_9e1b5\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\nmake.exe"  -f CMakeFiles\cmTC_9e1b5.dir\build.make /nologo -L                  CMakeFiles\cmTC_9e1b5.dir\build
-Building CXX object CMakeFiles/cmTC_9e1b5.dir/CMakeCXXCompilerABI.cpp.obj
-	"C:\Program Files\JetBrains\CLion 2020.3.3\bin\cmake\win\bin\cmake.exe" -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_9e1b5.dir\CMakeCXXCompilerABI.cpp.obj.d --working-dir=D:\Experimentation\ArtEngine\ArtEngine\cmake-build-debug\CMakeFiles\CMakeTmp --filter-prefix="" -- C:\PROGRA~2\MICROS~3\2019\COMMUN~1\VC\Tools\MSVC\1429~1.301\bin\Hostx64\x64\cl.exe @C:\Users\kenne\AppData\Local\Temp\nmD870.tmp
-Linking CXX executable cmTC_9e1b5.exe
-	"C:\Program Files\JetBrains\CLion 2020.3.3\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_9e1b5.dir --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100190~1.0\x64\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100190~1.0\x64\mt.exe --manifests -- C:\PROGRA~2\MICROS~3\2019\COMMUN~1\VC\Tools\MSVC\1429~1.301\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_9e1b5.dir\objects1.rsp @C:\Users\kenne\AppData\Local\Temp\nmD8CE.tmp
-	echo >nul && "C:\Program Files\PowerShell\7\pwsh.exe" -noprofile -executionpolicy Bypass -file C:/dev/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/CMakeTmp/cmTC_9e1b5.exe -installedDir C:/dev/vcpkg/installed/x64-windows/debug/bin -OutVariable out
+Run Build Command(s):nmake -f Makefile /nologo cmTC_b15c4\fast && 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\bin\HostX64\x64\nmake.exe"  -f CMakeFiles\cmTC_b15c4.dir\build.make /nologo -L                  CMakeFiles\cmTC_b15c4.dir\build
+Building CXX object CMakeFiles/cmTC_b15c4.dir/CMakeCXXCompilerABI.cpp.obj
+	"C:\Program Files\JetBrains\CLion 2020.3.3\bin\cmake\win\bin\cmake.exe" -E cmake_cl_compile_depends --dep-file=CMakeFiles\cmTC_b15c4.dir\CMakeCXXCompilerABI.cpp.obj.d --working-dir=D:\Experimentation\ArtEngine\ArtEngine\cmake-build-debug\CMakeFiles\CMakeTmp --filter-prefix="" -- C:\PROGRA~2\MICROS~3\2019\COMMUN~1\VC\Tools\MSVC\1429~1.301\bin\Hostx64\x64\cl.exe @C:\Users\kenne\AppData\Local\Temp\nm44EF.tmp
+Linking CXX executable cmTC_b15c4.exe
+	"C:\Program Files\JetBrains\CLion 2020.3.3\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_b15c4.dir --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100190~1.0\x64\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100190~1.0\x64\mt.exe --manifests -- C:\PROGRA~2\MICROS~3\2019\COMMUN~1\VC\Tools\MSVC\1429~1.301\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_b15c4.dir\objects1.rsp @C:\Users\kenne\AppData\Local\Temp\nm453E.tmp
+	echo >nul && "C:\Program Files\PowerShell\7\pwsh.exe" -noprofile -executionpolicy Bypass -file C:/dev/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/CMakeTmp/cmTC_b15c4.exe -installedDir C:/dev/vcpkg/installed/x64-windows/debug/bin -OutVariable out
 
 
 

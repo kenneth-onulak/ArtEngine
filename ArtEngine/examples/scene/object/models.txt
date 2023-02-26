@@ -1,0 +1,5 @@
+object/Lamp.obj
+object/Chair.obj
+object/Table.obj
+object/Shelf.obj
+object/Frame.obj

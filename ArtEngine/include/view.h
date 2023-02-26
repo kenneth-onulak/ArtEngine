@@ -92,7 +92,7 @@ class View
     void ccw(bool is_counter_clockwise);
     void vsync(bool use_vsync);
 
-  private:
+  public:
     // window
     unsigned int m_width;  //!< window width
     unsigned int m_height; //!< window height

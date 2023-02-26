@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "log.h"
+#include "../pch.h"
 
 namespace my_log
 {

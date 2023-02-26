@@ -34,8 +34,6 @@
 				<Option type="1"/>
 				<Option compiler="msvc8"/>
 				<Compiler>
-					<Add directory="D:/Experimentation/ArtEngine/ArtEngine/./include"/>
-					<Add directory="D:/Experimentation/ArtEngine/ArtEngine/examples/shader"/>
 					<Add directory="C:/dev/vcpkg/installed/x64-windows/include"/>
 					<Add directory="C:/dev/vcpkg/installed/x64-windows/include/SDL2"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include"/>
@@ -61,8 +59,6 @@
 				<Option type="1"/>
 				<Option compiler="msvc8"/>
 				<Compiler>
-					<Add directory="D:/Experimentation/ArtEngine/ArtEngine/./include"/>
-					<Add directory="D:/Experimentation/ArtEngine/ArtEngine/examples/shader"/>
 					<Add directory="C:/dev/vcpkg/installed/x64-windows/include"/>
 					<Add directory="C:/dev/vcpkg/installed/x64-windows/include/SDL2"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include"/>
@@ -92,13 +88,10 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="D:/Experimentation/ArtEngine/ArtEngine/examples/voronoi/FastNoiseLite.h">
+		<Unit filename="D:/Experimentation/ArtEngine/ArtEngine/examples/scene/main.cpp">
 			<Option target="ArtEngine"/>
 		</Unit>
-		<Unit filename="D:/Experimentation/ArtEngine/ArtEngine/examples/voronoi/main.cpp">
-			<Option target="ArtEngine"/>
-		</Unit>
-		<Unit filename="D:/Experimentation/ArtEngine/ArtEngine/examples/voronoi/model.h">
+		<Unit filename="D:/Experimentation/ArtEngine/ArtEngine/examples/scene/model.h">
 			<Option target="ArtEngine"/>
 		</Unit>
 		<Unit filename="D:/Experimentation/ArtEngine/ArtEngine/include/ArtEngine.cpp">

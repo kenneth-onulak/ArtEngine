@@ -118,29 +118,29 @@ ArtEngine\fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\ArtEngine.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\ArtEngine.dir\build
 .PHONY : ArtEngine\fast
 
-examples\voronoi\main.obj: examples\voronoi\main.cpp.obj
-.PHONY : examples\voronoi\main.obj
+examples\scene\main.obj: examples\scene\main.cpp.obj
+.PHONY : examples\scene\main.obj
 
 # target to build an object file
-examples\voronoi\main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\ArtEngine.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\ArtEngine.dir\examples\voronoi\main.cpp.obj
-.PHONY : examples\voronoi\main.cpp.obj
+examples\scene\main.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ArtEngine.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\ArtEngine.dir\examples\scene\main.cpp.obj
+.PHONY : examples\scene\main.cpp.obj
 
-examples\voronoi\main.i: examples\voronoi\main.cpp.i
-.PHONY : examples\voronoi\main.i
+examples\scene\main.i: examples\scene\main.cpp.i
+.PHONY : examples\scene\main.i
 
 # target to preprocess a source file
-examples\voronoi\main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\ArtEngine.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\ArtEngine.dir\examples\voronoi\main.cpp.i
-.PHONY : examples\voronoi\main.cpp.i
+examples\scene\main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ArtEngine.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\ArtEngine.dir\examples\scene\main.cpp.i
+.PHONY : examples\scene\main.cpp.i
 
-examples\voronoi\main.s: examples\voronoi\main.cpp.s
-.PHONY : examples\voronoi\main.s
+examples\scene\main.s: examples\scene\main.cpp.s
+.PHONY : examples\scene\main.s
 
 # target to generate assembly for a file
-examples\voronoi\main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\ArtEngine.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\ArtEngine.dir\examples\voronoi\main.cpp.s
-.PHONY : examples\voronoi\main.cpp.s
+examples\scene\main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\ArtEngine.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\ArtEngine.dir\examples\scene\main.cpp.s
+.PHONY : examples\scene\main.cpp.s
 
 include\ArtEngine.obj: include\ArtEngine.cpp.obj
 .PHONY : include\ArtEngine.obj
@@ -559,9 +559,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... ArtEngine
-	@echo ... examples/voronoi/main.obj
-	@echo ... examples/voronoi/main.i
-	@echo ... examples/voronoi/main.s
+	@echo ... examples/scene/main.obj
+	@echo ... examples/scene/main.i
+	@echo ... examples/scene/main.s
 	@echo ... include/ArtEngine.obj
 	@echo ... include/ArtEngine.i
 	@echo ... include/ArtEngine.s

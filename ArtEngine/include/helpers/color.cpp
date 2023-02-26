@@ -1,5 +1,4 @@
-#include "pch.h"
-#include "color.h"
+#include "../pch.h"
 
 namespace color
 {

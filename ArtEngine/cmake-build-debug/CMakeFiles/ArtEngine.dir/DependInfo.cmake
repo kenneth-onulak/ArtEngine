@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/Experimentation/ArtEngine/ArtEngine/examples/voronoi/main.cpp" "D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/ArtEngine.dir/examples/voronoi/main.cpp.obj"
+  "D:/Experimentation/ArtEngine/ArtEngine/examples/scene/main.cpp" "D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/ArtEngine.dir/examples/scene/main.cpp.obj"
   "D:/Experimentation/ArtEngine/ArtEngine/include/ArtEngine.cpp" "D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/ArtEngine.dir/include/ArtEngine.cpp.obj"
   "D:/Experimentation/ArtEngine/ArtEngine/include/event.cpp" "D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/ArtEngine.dir/include/event.cpp.obj"
   "D:/Experimentation/ArtEngine/ArtEngine/include/helpers/camera.cpp" "D:/Experimentation/ArtEngine/ArtEngine/cmake-build-debug/CMakeFiles/ArtEngine.dir/include/helpers/camera.cpp.obj"
@@ -31,8 +31,6 @@ set(CMAKE_CXX_COMPILER_ID "MSVC")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  ".././include"
-  "../examples/shader"
   "C:/dev/vcpkg/installed/x64-windows/include"
   "C:/dev/vcpkg/installed/x64-windows/include/SDL2"
   )
