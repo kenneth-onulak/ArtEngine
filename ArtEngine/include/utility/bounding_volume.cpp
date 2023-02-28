@@ -36,6 +36,14 @@ void AABB::compute()
     is_dirty = false;
 }
 
+// type 0 0 1, #op (p * n) 0, normals 3
+static std::array<glm::vec3, 3> constexpr epos6 = {
+    glm::vec3{1, 0, 0}, //
+    glm::vec3{0, 1, 0}, //
+    glm::vec3{0, 0, 1}  //
+};
+
+// type 1 1 1, #op (p * n) 2, normals 4
 static std::array<glm::vec3, 4> constexpr epos8 = {
     glm::vec3{1, 1, 1},  //
     glm::vec3{1, 1, -1}, //
@@ -43,6 +51,7 @@ static std::array<glm::vec3, 4> constexpr epos8 = {
     glm::vec3{1, -1, -1} //
 };
 
+// type 0 1 1, #op (p * n) 1, normals 6
 static std::array<glm::vec3, 6> constexpr epos12 = {
     glm::vec3{1, 1, 0},  //
     glm::vec3{1, -1, 0}, //
@@ -52,7 +61,8 @@ static std::array<glm::vec3, 6> constexpr epos12 = {
     glm::vec3{0, 1, -1}  //
 };
 
-static std::array<glm::vec3, 12> constexpr epos24 = {
+// type 0 1 2, #op (p * n) 2, normals 12
+static std::array<glm::vec3, 12> constexpr epos24_1 = {
     glm::vec3{0, 1, 2},  //
     glm::vec3{0, 2, 1},  //
     glm::vec3{1, 0, 2},  //
@@ -65,6 +75,38 @@ static std::array<glm::vec3, 12> constexpr epos24 = {
     glm::vec3{2, 0, -1}, //
     glm::vec3{1, -2, 0}, //
     glm::vec3{2, -1, 0}  //
+};
+
+// type 1 1 2, #op (p * n) 3, normals 12
+static std::array<glm::vec3, 12> constexpr epos24_2 = {
+    glm::vec3{1, 1, 2},   //
+    glm::vec3{2, 1, 1},   //
+    glm::vec3{1, 2, 1},   //
+    glm::vec3{1, -1, 2},  //
+    glm::vec3{1, 1, -2},  //
+    glm::vec3{1, -1, -2}, //
+    glm::vec3{2, -1, 1},  //
+    glm::vec3{2, 1, -1},  //
+    glm::vec3{2, -1, -1}, //
+    glm::vec3{1, -2, 1},  //
+    glm::vec3{1, 2, -1},  //
+    glm::vec3{1, -2, -1}  //
+};
+
+// type 1 2 2, #op (p * n) 4, normals 12
+static std::array<glm::vec3, 12> constexpr epos24_3 = {
+    glm::vec3{2, 2, 1},   //
+    glm::vec3{1, 2, 2},   //
+    glm::vec3{2, 1, 2},   //
+    glm::vec3{2, -2, 1},  //
+    glm::vec3{2, 2, -1},  //
+    glm::vec3{2, -2, -1}, //
+    glm::vec3{1, -2, 2},  //
+    glm::vec3{1, 2, -2},  //
+    glm::vec3{1, -2, -2}, //
+    glm::vec3{2, -1, 2},  //
+    glm::vec3{2, 1, -2},  //
+    glm::vec3{2, -1, -2}  //
 };
 
 void Sphere::compute(sphere_type t)
@@ -88,12 +130,14 @@ void Sphere::compute(sphere_type t)
     case sphere_type::ritter:
         ritter(points);
         break;
-    case sphere_type::larsson8:
+    case sphere_type::larsson6:
         // fallthrough
-    case sphere_type::larsson12:
+    case sphere_type::larsson14:
         // fallthrough
-    case sphere_type::larsson24:
-        // larsson(points);
+    case sphere_type::larsson26:
+        // fallthrough
+    case sphere_type::larsson98:
+        larsson(points);
         break;
     case sphere_type::pca:
         // pca(points);
@@ -119,6 +163,32 @@ void Sphere::enclose(glm::vec3 p)
     float new_radius = (glm::length(dir) + radius) * 0.5f;
     center = center + (new_radius - radius) * d;
     radius = new_radius;
+}
+
+std::pair<glm::vec3, glm::vec3> Sphere::extreme_points_along_direction(glm::vec3 d, const std::vector<glm::vec3> &v)
+{
+    static float constexpr f_max = std::numeric_limits<float>::max();
+    static float constexpr f_min = -f_max;
+
+    float min_dist = f_max;
+    float max_dist = f_min;
+
+    glm::vec3 min, max;
+    for (auto const &p : v)
+    {
+        float dist = glm::dot(d, p);
+        if (min_dist > dist)
+        {
+            min_dist = dist;
+            min = p;
+        }
+        if (max_dist <= dist)
+        {
+            max_dist = dist;
+            max = p;
+        }
+    }
+    return {min, max};
 }
 
 std::pair<glm::vec3, glm::vec3> Sphere::extreme_points_along_xyz(const std::vector<glm::vec3> &v)
@@ -203,6 +273,64 @@ void Sphere::ritter(const std::vector<glm::vec3> &v)
     radius = glm::distance(extremes.second, center);
 
     // enclose all points in the sphere
+    for (auto const &p : v)
+        enclose(p);
+}
+
+void Sphere::larsson(const std::vector<glm::vec3> &v)
+{
+    // choose a set of k points from all points
+    std::vector<glm::vec3> k_points;
+    for (size_t i = 0; i < v.size(); i += 5)
+        k_points.push_back(v[i]);
+
+    // compute extreme points (min, max) for each epos
+    std::vector<std::pair<glm::vec3, glm::vec3>> extremes;
+    switch (type)
+    {
+    case sphere_type::larsson98:
+        for (auto const &dir : epos24_1)
+            extremes.emplace_back(extreme_points_along_direction(dir, k_points));
+        for (auto const &dir : epos24_2)
+            extremes.emplace_back(extreme_points_along_direction(dir, k_points));
+        for (auto const &dir : epos24_3)
+            extremes.emplace_back(extreme_points_along_direction(dir, k_points));
+        // fallthrough
+    case sphere_type::larsson26:
+        for (auto const &dir : epos12)
+            extremes.emplace_back(extreme_points_along_direction(dir, k_points));
+        // fallthrough
+    case sphere_type::larsson14:
+        for (auto const &dir : epos8)
+            extremes.emplace_back(extreme_points_along_direction(dir, k_points));
+        // fallthrough
+    case sphere_type::larsson6:
+        for (auto const &dir : epos6)
+            extremes.emplace_back(extreme_points_along_direction(dir, k_points));
+        break;
+    default:
+        std::cout << "Error: EPOS value not recognized." << std::endl;
+        break;
+    }
+
+    // find the pair of points the furthest apart
+    float dist = -std::numeric_limits<float>::max();
+    std::pair<glm::vec3, glm::vec3> furthest_pair;
+    for (auto const &[min, max] : extremes)
+    {
+        float d = glm::distance(min, max);
+        if (dist < d)
+        {
+            dist = d;
+            furthest_pair = {min, max};
+        }
+    }
+
+    // set up sphere
+    center = (furthest_pair.first + furthest_pair.second) * 0.5f;
+    radius = glm::length(furthest_pair.second - center);
+
+    // enclose all points
     for (auto const &p : v)
         enclose(p);
 }

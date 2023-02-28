@@ -81,7 +81,7 @@ std::function<void()> eventHandler = []() {
 // interface function
 Handle interfaceFunc = []() {
     // window Size
-    ImGui::SetNextWindowSize(ImVec2(318, 305), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(318, 335), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Once);
 
     ImGui::Begin("Bounding Volume Controller", NULL, ImGuiWindowFlags_NoResize);
@@ -122,27 +122,35 @@ Handle interfaceFunc = []() {
         }
         ImGui::Spacing();
         ImGui::Spacing();
-        if (ImGui::Button("Larsson EPOS8", ImVec2(-1, 0)))
+        if (ImGui::Button("Larsson EPOS6", ImVec2(-1, 0)))
         {
             use_aabb = false;
             use_sphere = true;
-            sphere_type = Sphere::sphere_type::larsson8;
+            sphere_type = Sphere::sphere_type::larsson6;
         }
         ImGui::Spacing();
         ImGui::Spacing();
-        if (ImGui::Button("Larsson EPOS12", ImVec2(-1, 0)))
+        if (ImGui::Button("Larsson EPOS14", ImVec2(-1, 0)))
         {
             use_aabb = false;
             use_sphere = true;
-            sphere_type = Sphere::sphere_type::larsson12;
+            sphere_type = Sphere::sphere_type::larsson14;
         }
         ImGui::Spacing();
         ImGui::Spacing();
-        if (ImGui::Button("Larsson EPOS24", ImVec2(-1, 0)))
+        if (ImGui::Button("Larsson EPOS26", ImVec2(-1, 0)))
         {
             use_aabb = false;
             use_sphere = true;
-            sphere_type = Sphere::sphere_type::larsson24;
+            sphere_type = Sphere::sphere_type::larsson26;
+        }
+        ImGui::Spacing();
+        ImGui::Spacing();
+        if (ImGui::Button("Larsson EPOS98", ImVec2(-1, 0)))
+        {
+            use_aabb = false;
+            use_sphere = true;
+            sphere_type = Sphere::sphere_type::larsson98;
         }
         ImGui::Spacing();
         ImGui::Spacing();

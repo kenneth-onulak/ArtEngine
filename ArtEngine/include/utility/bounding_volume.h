@@ -26,9 +26,10 @@ struct Sphere
     {
         centroid,
         ritter,
-        larsson8,
-        larsson12,
-        larsson24,
+        larsson6,
+        larsson14,
+        larsson26,
+        larsson98,
         pca,
     };
 
@@ -37,9 +38,9 @@ struct Sphere
     void compute(sphere_type t);
     std::pair<float, float> get_extents(std::string axis);
 
+    sphere_type type = sphere_type::centroid; //!< current type of sphere
     glm::vec3 center;                         //!< center position
     float radius;                             //!< radius
-    sphere_type type = sphere_type::centroid; //!< current type of sphere
     bool is_dirty = false;                    //!< recompute when dirty
 
     Model *model; //!< pointer to the model to access vertex info
