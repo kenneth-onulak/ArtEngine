@@ -19,7 +19,11 @@ struct Model
     glm::mat4 model = glm::mat4(1.0f);                 //!< model matrix
     std::unordered_map<std::string, int> bindings;     //!< binding points of attributes
     std::unordered_map<std::string, Buffer *> buffers; //!< owned buffers
-    std::string name; //!< model name
+    std::string name;                                  //!< model name
+
+    // boundary information
+    AABB aabb{};
+    Sphere sphere{};
 
 }; // struct Model
 

@@ -42,7 +42,7 @@ extern float field_of_view; //!< field of view
 
 extern glm::vec3 position; // z
 
-extern glm::vec3 look; // look at vector
+extern glm::vec3 look; //!< look at vector
 
 extern float zoom_rate; //!< how fast you can zoom
 extern float move_rate; //!< how fast you can move

@@ -42,7 +42,7 @@ std::unordered_map<std::string, glm::vec3> materials(std::string file)
     return material;
 }
 
-Model *load(std::string file)
+Model *load(std::string file, glm::vec3 color)
 {
     std::ifstream in(file + ".obj", std::ios::in);
     if (!in.is_open())
@@ -60,8 +60,14 @@ Model *load(std::string file)
     std::vector<float> normals;
     std::vector<float> colors;
 
-    glm::vec3 color = color::magenta;
     bool vt = false;
+
+    static float constexpr f_max = std::numeric_limits<float>::max();
+    static float constexpr f_min = -f_max;
+
+    // min max for aabb
+    glm::vec3 min(f_max);
+    glm::vec3 max(f_min);
 
     std::string line;
     while (std::getline(in, line))
@@ -82,6 +88,14 @@ Model *load(std::string file)
             glm::vec3 v;
             s >> v.x >> v.y >> v.z;
             vertex_buffer.push_back(v);
+
+            // compute aabb extremes
+            min.x = std::min(min.x, v.x);
+            min.y = std::min(min.y, v.y);
+            min.z = std::min(min.z, v.z);
+            max.x = std::max(max.x, v.x);
+            max.y = std::max(max.y, v.y);
+            max.z = std::max(max.z, v.z);
         }
         // texture data - not handled
         else if (line.substr(0, 3) == "vt ")
@@ -124,9 +138,9 @@ Model *load(std::string file)
                                  &vi[2], &ui[2], &ni[2]);
                 if (n != 9)
                 {
-                    n = sscanf_s(line.substr(2).c_str(), "-%d//-%d -%d//-%d -%d//-%d\n", //
-                                 &vi[0], &ni[0],                                         //
-                                 &vi[1], &ni[1],                                         //
+                    n = sscanf_s(line.substr(2).c_str(), "%d//%d %d//%d %d//%d\n", //
+                                 &vi[0], &ni[0],                                   //
+                                 &vi[1], &ni[1],                                   //
                                  &vi[2], &ni[2]);
                     if (n != 6)
                     {
@@ -143,7 +157,7 @@ Model *load(std::string file)
                 positions.push_back(vertex_buffer[vi[i] - 1].z);
             }
             // copy over normals based on face data
-            if (!normals.empty())
+            if (!normals.empty() && !normal_buffer.empty())
             {
                 for (int i = 0; i < 3; ++i)
                 {
@@ -178,10 +192,14 @@ Model *load(std::string file)
 
     in.close();
 
-    // convert the file to the name of the object
-    auto index = file.find_last_of("/");
-    if (index != std::string::npos)
-        file = file.substr(index + 1);
+    // compute centroid sphere
+    float distance = f_min;
+    glm::vec3 center((max + min) * 0.5f);
+    for (auto const & v : vertex_buffer)
+    {
+        float d = glm::distance(center, v);
+        distance = std::max(distance, d);
+    }
 
     // construct the model from the buffer data
     Model *model = new Model({"in_Position", "in_Normal", "in_Color"}, file);
@@ -189,10 +207,21 @@ Model *load(std::string file)
     model->bind<glm::vec3>("in_Normal", new Buffer(normals), true);
     model->bind<glm::vec4>("in_Color", new Buffer(colors), true);
     model->size = positions.size() / 3;
+    // construct aabb
+    model->aabb.center = center;
+    model->aabb.min = min;
+    model->aabb.max = max;
+    model->aabb.scale = max - center;
+    model->aabb.model = model;
+    // construct bounding sphere
+    model->sphere.center = center;
+    model->sphere.radius = distance;
+    model->sphere.model = model;
+
     return model;
 }
 
-std::vector<Model *> load_all(std::string file)
+std::vector<Model *> load_all(std::string file, glm::vec3 color)
 {
     std::ifstream in(file + ".txt", std::ios::in);
     if (!in.is_open())
@@ -206,7 +235,11 @@ std::vector<Model *> load_all(std::string file)
 
     while (std::getline(in, line))
     {
-        Model *model = load(line.substr(0, line.length() - 4));
+        // append the object folder if trying to load a model without it
+        if (line.substr(0, 7) != "object/")
+            line = "object/" + line;
+        // load and save the model
+        Model *model = load(line.substr(0, line.length() - 4), color);
         if (!model)
             continue;
         models.push_back(model);

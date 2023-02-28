@@ -23,8 +23,11 @@ set( CMAKE_CXX_STANDARD 20 )           # C++ version
 ################################################################################
 # uncomment the line corresponding to the project you want to build
 
+#set( EXAMPLE_DIR examples/empty )    # empty - duplicate this project to start a new one
+
+set( EXAMPLE_DIR examples/bvh )    # bounding volume hierarchy
 #set( EXAMPLE_DIR examples/image )    # image
-set( EXAMPLE_DIR examples/scene )    # scene
+#set( EXAMPLE_DIR examples/scene )    # scene
 
 ################################################################################
 ################################### END EDIT ###################################

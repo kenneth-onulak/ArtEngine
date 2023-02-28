@@ -67,6 +67,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 // file / console IO
 #include <boost/filesystem/operations.hpp>
@@ -83,6 +84,9 @@ using Handle = std::function<void()>;
 // engine files
 #include "view.h"
 #include "event.h"
+
+// bounding volumes
+#include "utility/bounding_volume.h"
 
 // utility
 #include "utility/buffer.h"
