@@ -23,6 +23,7 @@ int main(int argc, char *args[])
     // load multiple objects from a file
     std::string path = "object/";
     std::vector<Model *> models = object::load_all(path + "Section6", color::silver);
+    model_size = models.size() - 1;
 
     // load debug objects
     Cube cube;
@@ -59,21 +60,41 @@ int main(int argc, char *args[])
         // render debug bounding volumes
         shader.uniform("renderbv", true);
         shader.uniform("bvcolor", bv_color);
-        for (auto const &model : models)
+        if (!use_single_bv)
+            for (auto const &model : models)
+            {
+                if (use_aabb)
+                {
+                    model->aabb.compute();
+                    cube.model = glm::translate(glm::mat4(1), model->aabb.center + translate) * //
+                                 glm::scale(scale_matrix(model->aabb.scale), glm::vec3(1));
+                    shader.uniform("model", cube.model);
+                    cube.render(GL_LINES);
+                }
+                if (use_sphere)
+                {
+                    model->sphere.compute(sphere_type);
+                    sphere->model = glm::translate(glm::mat4(1), model->sphere.center + translate) * //
+                                    glm::scale(scale_matrix(model->sphere.radius), glm::vec3(1));
+                    shader.uniform("model", sphere->model);
+                    sphere->render(GL_LINES);
+                }
+            }
+        if (use_single_bv)
         {
             if (use_aabb)
             {
-                model->aabb.compute();
-                cube.model = glm::translate(glm::mat4(1), model->aabb.center + translate) * //
-                             glm::scale(scale_matrix(model->aabb.scale), glm::vec3(1));
+                models[model_index]->aabb.compute();
+                cube.model = glm::translate(glm::mat4(1), models[model_index]->aabb.center + translate) * //
+                             glm::scale(scale_matrix(models[model_index]->aabb.scale), glm::vec3(1));
                 shader.uniform("model", cube.model);
                 cube.render(GL_LINES);
             }
             if (use_sphere)
             {
-                model->sphere.compute(sphere_type);
-                sphere->model = glm::translate(glm::mat4(1), model->sphere.center + translate) * //
-                                glm::scale(scale_matrix(model->sphere.radius), glm::vec3(1));
+                models[model_index]->sphere.compute(sphere_type);
+                sphere->model = glm::translate(glm::mat4(1), models[model_index]->sphere.center + translate) * //
+                                glm::scale(scale_matrix(models[model_index]->sphere.radius), glm::vec3(1));
                 shader.uniform("model", sphere->model);
                 sphere->render(GL_LINES);
             }

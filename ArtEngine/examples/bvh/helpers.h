@@ -26,9 +26,12 @@ float attenuation[3] = {0.5, 1.0, 5.0};
 
 // bounding volumes and bounding volume hierarchy
 bool use_bvh = false;
+bool use_single_bv = false;
 bool use_aabb = true;
 bool use_sphere = false;
 Sphere::sphere_type sphere_type = Sphere::sphere_type::centroid;
+size_t model_index = 0;
+size_t model_size;
 
 glm::vec3 bv_color = color::lime;
 
@@ -71,7 +74,7 @@ std::function<void()> eventHandler = []() {
         xz = glm::rotate(glm::mat4(1), glm::radians(0.75f), up) * glm::vec4(xz, 1.0);
     }
     if (Art::event.key_down(SDLK_LSHIFT))
-        pos = glm::rotate(glm::mat4(1), glm::radians(0.75f), glm::vec3(0,0,1)) * glm::vec4(pos, 1.0);
+        pos = glm::rotate(glm::mat4(1), glm::radians(0.75f), glm::vec3(0, 0, 1)) * glm::vec4(pos, 1.0);
     if (Art::event.key_down(SDLK_SPACE))
         pos += glm::vec3(1, 0, 0);
 
@@ -81,15 +84,47 @@ std::function<void()> eventHandler = []() {
 // interface function
 Handle interfaceFunc = []() {
     // window Size
-    ImGui::SetNextWindowSize(ImVec2(318, 335), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(318, -1), ImGuiCond_Once);
     ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Once);
 
     ImGui::Begin("Bounding Volume Controller", NULL, ImGuiWindowFlags_NoResize);
+    ImGui::Spacing();
+    ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Spacing();
+    ImGui::Spacing();
 
     ImGui::BeginTabBar("tabs");
     if (ImGui::BeginTabItem("Bounding Volume"))
     {
         use_bvh = false;
+
+        ImGui::Spacing();
+        ImGui::Spacing();
+        if (ImGui::Button("Render Single Bounding Volume", ImVec2(-1, 0)))
+            use_single_bv = true;
+        ImGui::Spacing();
+        ImGui::Spacing();
+        if (ImGui::Button("Previous Model", ImVec2(ImGui::GetWindowWidth() * 0.48f, 0)))
+        {
+            if (model_index > 0)
+                --model_index;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Next Model", ImVec2(-1, 0)))
+        {
+            if (model_index < model_size)
+                ++model_index;
+        }
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+        ImGui::Spacing();
+        if (ImGui::Button("Render All Bounding Volumes", ImVec2(-1, 0)))
+            use_single_bv = false;
+        ImGui::Spacing();
+        ImGui::Spacing();
+        ImGui::Separator();
         ImGui::Spacing();
         ImGui::Spacing();
         if (ImGui::Button("None", ImVec2(-1, 0)))
@@ -122,7 +157,7 @@ Handle interfaceFunc = []() {
         }
         ImGui::Spacing();
         ImGui::Spacing();
-        if (ImGui::Button("Larsson EPOS6", ImVec2(-1, 0)))
+        if (ImGui::Button("Larsson EPOS-6", ImVec2(-1, 0)))
         {
             use_aabb = false;
             use_sphere = true;
@@ -130,7 +165,7 @@ Handle interfaceFunc = []() {
         }
         ImGui::Spacing();
         ImGui::Spacing();
-        if (ImGui::Button("Larsson EPOS14", ImVec2(-1, 0)))
+        if (ImGui::Button("Larsson EPOS-14", ImVec2(-1, 0)))
         {
             use_aabb = false;
             use_sphere = true;
@@ -138,7 +173,7 @@ Handle interfaceFunc = []() {
         }
         ImGui::Spacing();
         ImGui::Spacing();
-        if (ImGui::Button("Larsson EPOS26", ImVec2(-1, 0)))
+        if (ImGui::Button("Larsson EPOS-26", ImVec2(-1, 0)))
         {
             use_aabb = false;
             use_sphere = true;
@@ -146,7 +181,7 @@ Handle interfaceFunc = []() {
         }
         ImGui::Spacing();
         ImGui::Spacing();
-        if (ImGui::Button("Larsson EPOS98", ImVec2(-1, 0)))
+        if (ImGui::Button("Larsson EPOS-98", ImVec2(-1, 0)))
         {
             use_aabb = false;
             use_sphere = true;
@@ -165,6 +200,8 @@ Handle interfaceFunc = []() {
 
     if (ImGui::BeginTabItem("Bounding Volume Hierarchy"))
     {
+        use_bvh = true;
+
         ImGui::EndTabItem();
     }
 

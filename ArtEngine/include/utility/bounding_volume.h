@@ -53,10 +53,10 @@ struct Sphere
 
     void centroid(std::vector<glm::vec3> const &v);
     void ritter(std::vector<glm::vec3> const &v);
+    void larsson(std::vector<glm::vec3> const &v);
     void symschur2(glm::mat3 const &m, int p, int q, float &s, float &c);
     void jacobi(glm::mat3 &m1, glm::mat3 &m2);
     void pca(std::vector<glm::vec3> const &v);
-    void larsson(std::vector<glm::vec3> const &v);
 }; // struct Sphere
 
 #endif // ARTENGINE_BOUNDING_VOLUME_H

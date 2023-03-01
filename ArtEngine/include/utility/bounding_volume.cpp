@@ -1,5 +1,8 @@
 #include "../pch.h"
 
+static float constexpr f_max = std::numeric_limits<float>::max();
+static float constexpr f_min = -f_max;
+
 void AABB::compute()
 {
     if (!is_dirty)
@@ -9,9 +12,6 @@ void AABB::compute()
     std::vector<glm::vec3> points;
     points.resize(model->size);
     model->buffers["in_Position"]->retrieve(points);
-
-    static float constexpr f_max = std::numeric_limits<float>::max();
-    static float constexpr f_min = -f_max;
 
     glm::vec3 min_p(f_max);
     glm::vec3 max_p(f_min);
@@ -124,6 +124,9 @@ void Sphere::compute(sphere_type t)
 
     switch (type)
     {
+    default:
+        std::cout << "Error: Sphere type not recognized, using centroid method." << std::endl;
+        // fallthrough
     case sphere_type::centroid:
         centroid(points);
         break;
@@ -140,10 +143,7 @@ void Sphere::compute(sphere_type t)
         larsson(points);
         break;
     case sphere_type::pca:
-        // pca(points);
-        break;
-    default:
-        std::cout << "Error: Sphere type not recognized." << std::endl;
+        pca(points);
         break;
     }
 
@@ -167,9 +167,6 @@ void Sphere::enclose(glm::vec3 p)
 
 std::pair<glm::vec3, glm::vec3> Sphere::extreme_points_along_direction(glm::vec3 d, const std::vector<glm::vec3> &v)
 {
-    static float constexpr f_max = std::numeric_limits<float>::max();
-    static float constexpr f_min = -f_max;
-
     float min_dist = f_max;
     float max_dist = f_min;
 
@@ -230,11 +227,47 @@ std::pair<glm::vec3, glm::vec3> Sphere::extreme_points_along_xyz(const std::vect
     return {v[min], v[max]};
 }
 
+glm::mat3 Sphere::covariance_matrix(const std::vector<glm::vec3> &v)
+{
+    // compute the average
+    float const scalar = 1.0f / static_cast<float>(v.size());
+    glm::vec3 u(0);
+    for (auto const &p : v)
+        u += p;
+    u *= scalar;
+
+    // compute the covariance matrix
+    // C_ij = 1/N (E) k=1->N (P_k.i u.i)(P_k.j u.j)
+    // for each index add the following
+    // x*x x*y x*z
+    // y*x y*y y*z
+    // z*x z*y z*z
+    glm::mat3 covariance(0);
+    for (auto const &point : v)
+    {
+        glm::vec3 p = point - u;
+        // top row
+        covariance[0][0] += p.x * p.x;
+        covariance[1][0] += p.x * p.y;
+        covariance[2][0] += p.x * p.z;
+        // middle row
+        covariance[1][1] += p.y * p.y;
+        covariance[2][1] += p.y * p.z;
+        // bottom row
+        covariance[2][2] += p.z * p.z;
+    }
+    covariance *= scalar;
+
+    // matrix is mirrored across the diagonal
+    covariance[0][1] = covariance[1][0];
+    covariance[0][2] = covariance[2][0];
+    covariance[1][2] = covariance[2][1];
+
+    return covariance;
+}
+
 void Sphere::centroid(const std::vector<glm::vec3> &v)
 {
-    static float constexpr f_max = std::numeric_limits<float>::max();
-    static float constexpr f_min = -f_max;
-
     glm::vec3 min(f_max);
     glm::vec3 max(f_min);
 
@@ -281,13 +314,16 @@ void Sphere::larsson(const std::vector<glm::vec3> &v)
 {
     // choose a set of k points from all points
     std::vector<glm::vec3> k_points;
-    for (size_t i = 0; i < v.size(); i += 5)
+    for (size_t i = 0; i < v.size(); i += 3)
         k_points.push_back(v[i]);
 
     // compute extreme points (min, max) for each epos
     std::vector<std::pair<glm::vec3, glm::vec3>> extremes;
     switch (type)
     {
+    default:
+        std::cout << "Error: EPOS value not recognized, using EPOS-98" << std::endl;
+        // fallthrough
     case sphere_type::larsson98:
         for (auto const &dir : epos24_1)
             extremes.emplace_back(extreme_points_along_direction(dir, k_points));
@@ -308,13 +344,10 @@ void Sphere::larsson(const std::vector<glm::vec3> &v)
         for (auto const &dir : epos6)
             extremes.emplace_back(extreme_points_along_direction(dir, k_points));
         break;
-    default:
-        std::cout << "Error: EPOS value not recognized." << std::endl;
-        break;
     }
 
     // find the pair of points the furthest apart
-    float dist = -std::numeric_limits<float>::max();
+    float dist = f_min;
     std::pair<glm::vec3, glm::vec3> furthest_pair;
     for (auto const &[min, max] : extremes)
     {
@@ -332,5 +365,132 @@ void Sphere::larsson(const std::vector<glm::vec3> &v)
 
     // enclose all points
     for (auto const &p : v)
+        enclose(p);
+}
+
+void Sphere::symschur2(const glm::mat3 &m, int p, int q, float &s, float &c)
+{
+    if (abs(m[p][q]) > 0.0001f)
+    {
+        float r = (m[q][p] - m[p][q]) / (2.0f * m[p][q]);
+        float t;
+        if (r >= 0.0f)
+            t = 1.0f / (r + sqrt(1.0f + r * r));
+        else
+            t = -1.0f / (-r + sqrt(1.0f + r * r));
+        c = 1.0f / sqrt(1.0f + t * t);
+        s = t * c;
+    }
+    else
+    {
+        s = 0.0f;
+        c = 1.0f;
+    }
+}
+
+void Sphere::jacobi(glm::mat3 &m1, glm::mat3 &m2)
+{
+    // initialize m2 to identiy matrix
+    glm::mat3 identity(1);
+    m2 = identity;
+
+    // repeat for some maximum number of iterations
+    static int constexpr max_iterations = 50;
+
+    int p, q;
+    float s, c;      // initialized / modified by calls to symschur2()
+    float prev_norm; // initialized at the end of the first n loop
+    glm::mat3 J, b, t;
+    for (int n = 0; n < max_iterations; ++n)
+    {
+        // find the largest off-diagonal absolute element m1[p][q]
+        p = 0;
+        q = 1;
+        for (int i = 0; i < 3; ++i)
+        {
+            for (int j = 0; j < 3; ++j)
+            {
+                // off diagonal
+                if (i == j)
+                    continue;
+                if (abs(m1[i][j]) > abs(m1[p][q]))
+                {
+                    p = i;
+                    q = j;
+                }
+            }
+        }
+
+        // compute jacobi rotation matrix J(p, q, theta)
+        symschur2(m1, p, q, s, c);
+        // set J to the identity matrix
+        J = identity;
+        // set rotation matrix
+        J[p][p] = c;
+        J[p][q] = s;
+        J[q][p] = -s;
+        J[q][q] = c;
+
+        // cumulate rotations into what will contain the eigen vectors
+        m2 = m2 * J;
+        // make m2 more diagonal, until eigen values remain on diagonal
+        m1 = glm::transpose(J) * m1 * J;
+        // compute "norm" of off-diagonal elements
+        float norm = 0.0f;
+        for (int i = 0; i < 3; ++i)
+        {
+            for (int j = 0; j < 3; ++j)
+            {
+                if (i == j)
+                    continue;
+                norm += m1[i][j] * m1[i][j];
+            }
+        }
+
+        // stop when no longer decreasing
+        if (n > 2 && norm >= prev_norm)
+            return;
+        prev_norm = norm;
+    }
+}
+
+void Sphere::pca(const std::vector<glm::vec3> &vertices)
+{
+    // compute covariance matrix
+    glm::mat3 m = covariance_matrix(vertices);
+    // decompose it into eigen vectors (v) and eigen values (m)
+    glm::mat3 v;
+    jacobi(m, v);
+    // find the component with the largest spread (the largest magnitude eigen value)
+    glm::vec3 e;
+    int max_c = 0;
+    float max_f = abs(m[1][1]);
+    float max_e = abs(m[0][0]);
+
+    if (max_f > max_e)
+    {
+        max_c = 1;
+        max_e = max_f;
+    }
+    max_f = abs(m[2][2]);
+    if (max_f > max_e)
+    {
+        max_c = 2;
+        max_e = max_f;
+    }
+
+    e[0] = v[0][max_c];
+    e[1] = v[1][max_c];
+    e[2] = v[2][max_c];
+
+    // find the most extreme points along direction 'e'
+    std::pair<glm::vec3, glm::vec3> result = extreme_points_along_direction(e, vertices);
+
+    // set up the sphere
+    center = (result.first + result.second) * 0.5f;
+    radius = glm::length(result.second - center);
+
+    // enclose all points
+    for (auto const &p : vertices)
         enclose(p);
 }
