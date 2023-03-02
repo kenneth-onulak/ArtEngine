@@ -44,6 +44,10 @@ std::unordered_map<std::string, glm::vec3> materials(std::string file)
 
 Model *load(std::string file, glm::vec3 color)
 {
+    // append the object folder if trying to load a model without it
+    if (file.substr(0, 7) != "object/")
+        file = "object/" + file;
+
     std::ifstream in(file + ".obj", std::ios::in);
     if (!in.is_open())
     {
@@ -221,31 +225,30 @@ Model *load(std::string file, glm::vec3 color)
     return model;
 }
 
-std::vector<Model *> load_all(std::string file, glm::vec3 color)
+std::vector<Model *> load_all(std::vector<std::string> files, glm::vec3 color)
 {
-    std::ifstream in(file + ".txt", std::ios::in);
-    if (!in.is_open())
-    {
-        std::cout << "Error: Failed to open file " << file << ".txt" << std::endl;
-        return {};
-    }
-
     std::vector<Model *> models;
-    std::string line;
-
-    while (std::getline(in, line))
+    for (auto const &file : files)
     {
-        // append the object folder if trying to load a model without it
-        if (line.substr(0, 7) != "object/")
-            line = "object/" + line;
-        // load and save the model
-        Model *model = load(line.substr(0, line.length() - 4), color);
-        if (!model)
-            continue;
-        models.push_back(model);
-    }
+        std::ifstream in(file + ".txt", std::ios::in);
+        if (!in.is_open())
+        {
+            std::cout << "Error: Failed to open file " << file << ".txt" << std::endl;
+            break;
+        }
 
-    in.close();
+        std::string line;
+        while (std::getline(in, line))
+        {
+            // load and save the model
+            Model *model = load(line.substr(0, line.length() - 4), color);
+            if (!model)
+                continue;
+            models.push_back(model);
+        }
+
+        in.close();
+    }
     return models;
 }
 

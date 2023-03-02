@@ -71,7 +71,7 @@ void main(void)
     // render bounding volumes without lighting
     if (renderbv)
     {
-        fragColor = vec4(bvcolor, 1);
+        fragColor = vec4(bvcolor, 0.5);
         return;
     }
 

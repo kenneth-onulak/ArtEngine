@@ -5,10 +5,10 @@
 glm::vec3 pos = glm::vec3(20);
 glm::vec3 up = glm::vec3(0, 1, 0);
 glm::vec3 xz = glm::vec3(1, 0, 1);
-glm::vec3 look = glm::vec3(0, 10, 0);
+glm::vec3 look = glm::vec3(0, 15, 0);
 glm::mat4 proj;
 glm::mat4 view;
-float scale = 0.025f;
+float scale = 0.015f;
 
 // Pointlight Data
 float pointnear = 0.1f;
@@ -28,6 +28,7 @@ float attenuation[3] = {0.5, 1.0, 5.0};
 bool use_bvh = false;
 bool use_single_bv = false;
 bool use_aabb = true;
+AABB::bb_type bb_type = AABB::bb_type::aabb;
 bool use_sphere = false;
 Sphere::sphere_type sphere_type = Sphere::sphere_type::centroid;
 size_t model_index = 0;
@@ -74,9 +75,17 @@ std::function<void()> eventHandler = []() {
         xz = glm::rotate(glm::mat4(1), glm::radians(0.75f), up) * glm::vec4(xz, 1.0);
     }
     if (Art::event.key_down(SDLK_LSHIFT))
-        pos = glm::rotate(glm::mat4(1), glm::radians(0.75f), glm::vec3(0, 0, 1)) * glm::vec4(pos, 1.0);
+        look.y -= 0.5f;
     if (Art::event.key_down(SDLK_SPACE))
-        pos += glm::vec3(1, 0, 0);
+        look.y += 0.5f;
+    if (Art::event.key_down(SDLK_LEFT))
+        pos.x -= 0.5f;
+    if (Art::event.key_down(SDLK_RIGHT))
+        pos.x += 0.5f;
+    if (Art::event.key_down(SDLK_UP))
+        pos.y += 0.5f;
+    if (Art::event.key_down(SDLK_DOWN))
+        pos.y -= 0.5f;
 
     setup(); // recompute (I know this shouldn't be called all the time, whatever lol)
 };
@@ -104,7 +113,7 @@ Handle interfaceFunc = []() {
             use_single_bv = true;
         ImGui::Spacing();
         ImGui::Spacing();
-        if (ImGui::Button("Previous Model", ImVec2(ImGui::GetWindowWidth() * 0.48f, 0)))
+        if (ImGui::Button("Previous Model", ImVec2(ImGui::GetWindowWidth() * 0.46f, 0)))
         {
             if (model_index > 0)
                 --model_index;
@@ -138,6 +147,15 @@ Handle interfaceFunc = []() {
         {
             use_aabb = true;
             use_sphere = false;
+            bb_type = AABB::bb_type::aabb;
+        }
+        ImGui::Spacing();
+        ImGui::Spacing();
+        if (ImGui::Button("OBB", ImVec2(-1, 0)))
+        {
+            use_aabb = true;
+            use_sphere = false;
+            bb_type = AABB::bb_type::obb;
         }
         ImGui::Spacing();
         ImGui::Spacing();
@@ -195,12 +213,23 @@ Handle interfaceFunc = []() {
             use_sphere = true;
             sphere_type = Sphere::sphere_type::pca;
         }
+        ImGui::Spacing();
+        ImGui::Spacing();
+        if (ImGui::Button("Ellipsoid", ImVec2(-1, 0)))
+        {
+            use_aabb = false;
+            use_sphere = true;
+            sphere_type = Sphere::sphere_type::ellipsoid;
+        }
+        ImGui::Spacing();
+
         ImGui::EndTabItem();
     }
 
     if (ImGui::BeginTabItem("Bounding Volume Hierarchy"))
     {
         use_bvh = true;
+        use_single_bv = false;
 
         ImGui::EndTabItem();
     }
