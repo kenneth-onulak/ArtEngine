@@ -19,6 +19,7 @@ glm::vec3 const magenta(1, 0, 1);
 glm::vec3 const silver(0.753, 0.753, 0.753);
 glm::vec3 const gray(0.5, 0.5, 0.5);
 glm::vec3 const maroon(0.5, 0, 0);
+glm::vec3 const orange(1, 0.647, 0);
 glm::vec3 const olive(0.5, 0.5, 0);
 glm::vec3 const green(0, 0.5, 0);
 glm::vec3 const purple(0.5, 0, 0.5);

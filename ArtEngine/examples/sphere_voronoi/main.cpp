@@ -1,5 +1,5 @@
-#include "../include/pch.h"
-#include "../include/ArtEngine.h"
+#include "../../include/pch.h"
+#include "../../include/ArtEngine.h"
 
 #include "FastNoiseLite.h"
 
@@ -28,7 +28,7 @@ int main(int argc, char *args[])
 
     // shaders
     Shader sphere({"shader/sphere.vs", "shader/sphere.fs"}, {"in_Position"});
-    Icosphere icosahedron;
+    Icosphere icosahedron(20, 0);
 
     Shader cube_voronoi({"shader/cubevoronoi.vs", "shader/cubevoronoi.gs", "shader/cubevoronoi.fs"}, {"in_Position"});
     Cubemap voronoi(512, 512);
@@ -67,10 +67,10 @@ int main(int argc, char *args[])
     Art::view.pipeline = [&]() {
         Art::view.target(color::silver);
 
-        cube_voronoi.use();
-        cube_voronoi.uniform("vp", views);
-        cube_voronoi.uniform("R", R);
-        instance.render();
+//        cube_voronoi.use();
+//        cube_voronoi.uniform("vp", views);
+//        cube_voronoi.uniform("R", R);
+//        instance.render();
 
         sphere.use();
         sphere.uniform("vp", camera::view_projection);

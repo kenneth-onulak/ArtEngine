@@ -34,6 +34,8 @@ Sphere::sphere_type sphere_type = Sphere::sphere_type::centroid;
 size_t model_index = 0;
 size_t model_size;
 
+// color options
+static std::array<glm::vec3, 7> const colors = {color::red, color::orange, color::yellow, color::lime, color::cyan, color::magenta, color::white};
 glm::vec3 bv_color = color::lime;
 
 // compute matrices

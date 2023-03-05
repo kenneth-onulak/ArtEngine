@@ -86,16 +86,25 @@ struct Gizmo : public Model
 
 struct Icosphere : public Model
 {
-    std::vector<glm::vec3> positions;
-    std::vector<glm::uvec3> indices;
-    Buffer pos;
-    Buffer ind;
+    Icosphere(float radius, int subdivisions);
 
-    Icosphere();
+  private:
+    std::vector<float> compute_vertices() const;
+    void add_vertex(float x, float y, float z);
+    void add_vertices(float const v1[3], float const v2[3], float const v3[3]);
+    void add_indices(unsigned i1, unsigned i2, unsigned i3);
+
+    static float compute_scale_for_length(float const v[3], float length);
+    static void compute_half_vertex(float const v1[3], float const v2[3], float length, float new_v[3]);
 
     void build();
-    void split();
-    void sort();
+    void subdivide();
+
+    float radius;    //!< circumscribed radius
+    int subdivision; //!< number of subdivisions
+
+    std::vector<float> vertices;
+    std::vector<unsigned> indices;
 };
 
 #endif // ARTENGINE_MODEL_H

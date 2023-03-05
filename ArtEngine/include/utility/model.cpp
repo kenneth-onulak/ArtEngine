@@ -162,142 +162,216 @@ Gizmo::Gizmo()
 //// ICOSPHERE
 ////////////////////////////////////////////////////////////////////////////////
 
-Icosphere::Icosphere()
-    : Model({"in_Position", "in_Tex"}, "icosphere")
+Icosphere::Icosphere(float radius, int subdivisions)
+    : Model({"in_Position"}, "icosphere")
+    , radius(radius)
+    , subdivision(subdivisions)
 {
     build();
-    split();
+    subdivide();
 
-    pos.fill(positions);
-    ind.fill(indices);
+    bind<glm::vec3>("in_Position", new Buffer(vertices), true);
+    index(new Buffer(std::vector<glm::uvec3>(indices.begin(), indices.end())));
+    size = indices.size() * 3;
+}
 
-    bind<glm::vec3>("in_Position", &pos);
-    index(&ind);
-    size = indices.size();
+std::vector<float> Icosphere::compute_vertices() const
+{
+    static float constexpr pi = std::numbers::pi_v<float>;
+    static float constexpr h_angle = pi / 180 * 72; // 72 degree = 360 / 5;
+    static float const v_angle = atanf(1.0f / 2);   // elevation = 26.565 degree
+
+    // compute once and reuse inside the loop
+    static float const cos_v_angle = cosf(v_angle);
+    static float const sin_v_angle = sinf(v_angle);
+
+    std::vector<float> v(12 * 3);            // space for 12 vertices (x, y, z)
+    int row_2, row_3;                        // indices
+    float z, xy;                             // coords
+    float h_angle_1 = -pi / 2 - h_angle / 2; // start from -126 degree at 2nd row
+    float h_angle_2 = -pi / 2;               // start from -90 degree at 3rd row
+
+    // top vertex (0, 0, r)
+    v[0] = 0;
+    v[1] = 0;
+    v[2] = radius;
+
+    // 10 vertices between 2nd and 3rd row
+    for (int i = 1; i <= 5; ++i)
+    {
+        row_2 = i * 3;
+        row_3 = (i + 5) * 3;
+
+        // elevation
+        z = radius * sin_v_angle;
+        xy = radius * cos_v_angle;
+
+        // 2nd row
+        v[row_2] = xy * cosf(h_angle_1);     // xy
+        v[row_2 + 1] = xy * sinf(h_angle_1); // xy
+        v[row_2 + 2] = z;                    // z
+        // 3rd row
+        v[row_3] = xy * cosf(h_angle_2);     // xy
+        v[row_3 + 1] = xy * sinf(h_angle_2); // xy
+        v[row_3 + 2] = -z;                   // z
+
+        // next horizontal angles
+        h_angle_1 += h_angle;
+        h_angle_2 += h_angle;
+    }
+
+    // bottom vertex (0, 0, -r)
+    int i = 11 * 3;
+    v[i] = 0;
+    v[i + 1] = 0;
+    v[i + 2] = -radius;
+
+    return v;
+}
+
+void Icosphere::add_vertex(float x, float y, float z)
+{
+    vertices.push_back(x);
+    vertices.push_back(y);
+    vertices.push_back(z);
+}
+
+void Icosphere::add_vertices(float const v1[3], float const v2[3], float const v3[3])
+{
+    add_vertex(v1[0], v1[1], v1[2]);
+    add_vertex(v2[0], v2[1], v2[2]);
+    add_vertex(v3[0], v3[1], v3[2]);
+}
+
+void Icosphere::add_indices(unsigned i1, unsigned i2, unsigned i3)
+{
+    indices.push_back(i1);
+    indices.push_back(i2);
+    indices.push_back(i3);
+}
+
+float Icosphere::compute_scale_for_length(const float v[3], float length)
+{
+    // and normalize the vector then re-scale to new radius
+    return length / sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+}
+
+void Icosphere::compute_half_vertex(float const v1[3], float const v2[3], float length, float new_v[3])
+{
+    new_v[0] = v1[0] + v2[0];
+    new_v[1] = v1[1] + v2[1];
+    new_v[2] = v1[2] + v2[2];
+    float scale = compute_scale_for_length(new_v, length);
+    new_v[0] *= scale;
+    new_v[1] *= scale;
+    new_v[2] *= scale;
 }
 
 void Icosphere::build()
 {
-    const float r = 1.0f;
-    const float a = 72.0f / 360.0f * 2.0f * std::numbers::pi_v<float>;
+    // compute the 12 vertices of an icosahedron
+    vertices = compute_vertices();
 
-    // helper to add positions
-    auto add_pos = [&](float a, float b, float c) { positions.emplace_back(a, b, c); };
+    // create 20 triangles from the vertices
+    // flat example of the icosahedron vertices and triangles
+    //   00  00  00  00  00
+    //   /\  /\  /\  /\  /\
+    //  /  \/  \/  \/  \/  \
+    // 01--02--03--04--05--01
+    //  \  /\  /\  /\  /\  /\
+    //   \/  \/  \/  \/  \/  \
+    //   06--07--08--09--10--06
+    //    \  /\  /\  /\  /\  /
+    //     \/  \/  \/  \/  \/
+    //     11  11  11  11  11
 
-    // helper to form triangle indices
-    auto triangle = [&](int a, int b, int c) { indices.emplace_back(a, b, c); };
-
-    // top cap
-    add_pos(0, r, 0);
-
-    // top
-    for (int i = 0; i < 5; ++i)
-    {
-        float x1 = r * cos(atan(0.5)) * cos(a * i);
-        float y1 = r * cos(atan(0.5)) * sin(a * i);
-        float z1 = r * sin(atan(0.5));
-        add_pos(x1, z1, y1);
-    }
-
-    // bottom
-    for (int i = 0; i < 5; ++i)
-    {
-        float x2 = r * cos(atan(0.5)) * cos(a * i + a / 2.0f);
-        float y2 = r * cos(atan(0.5)) * sin(a * i + a / 2.0f);
-        float z2 = -r * sin(atan(0.5));
-        add_pos(x2, z2, y2);
-    }
-
-    // bottom cap
-    add_pos(0, -r, 0);
-
-    // top triangles
-    triangle(1, 0, 2);
-    triangle(2, 0, 3);
-    triangle(3, 0, 4);
-    triangle(4, 0, 5);
-    triangle(5, 0, 1);
-
-    // bottom triangles
-    triangle(6, 7, 11);
-    triangle(7, 8, 11);
-    triangle(8, 9, 11);
-    triangle(9, 10, 11);
-    triangle(10, 6, 11);
-
-    // connecting triangles (bottom)
-    triangle(6, 2, 7);
-    triangle(7, 3, 8);
-    triangle(8, 4, 9);
-    triangle(9, 5, 10);
-    triangle(10, 1, 6);
-
-    // connecting triangles (top)
-    triangle(2, 3, 7);
-    triangle(1, 2, 6);
-    triangle(3, 4, 8);
-    triangle(4, 5, 9);
-    triangle(5, 1, 10);
+    // track the vertices for splitting
+    // 1st row (5 triangles)
+    add_indices(0, 1, 2);
+    add_indices(0, 2, 3);
+    add_indices(0, 3, 4);
+    add_indices(0, 4, 5);
+    add_indices(0, 5, 1);
+    // 2nd row (10 triangles)
+    add_indices(1, 6, 2);
+    add_indices(2, 6, 7);
+    add_indices(2, 7, 3);
+    add_indices(3, 7, 8);
+    add_indices(3, 8, 4);
+    add_indices(4, 8, 9);
+    add_indices(4, 9, 5);
+    add_indices(5, 9, 10);
+    add_indices(5, 10, 1);
+    add_indices(1, 10, 6);
+    // 3rd row (5 triangles)
+    add_indices(6, 11, 7);
+    add_indices(7, 11, 8);
+    add_indices(8, 11, 9);
+    add_indices(9, 11, 10);
+    add_indices(10, 11, 6);
 }
 
-void Icosphere::split()
+void Icosphere::subdivide()
 {
-    std::vector<glm::uvec3> new_indices;
+    std::vector<float> temp_vertices;
+    std::vector<unsigned> temp_indices;
+    int index_count;
 
-    // helper to add positions
-    auto add_pos = [&](glm::vec3 p) { positions.push_back(p); };
+    float const *v1, *v2, *v3;             // pointer to original vertices of a triangle
+    float new_v1[3], new_v2[3], new_v3[3]; // new vertex positions
+    unsigned index;                        // new index value
 
-    // helper to form triangle indices
-    auto triangle = [&](int a, int b, int c) { new_indices.emplace_back(a, b, c); };
-
-    auto split_triangle = [&](int i) {
-        // indices of the old triangle
-        GLuint k1 = indices[i][0];
-        GLuint k2 = indices[i][1];
-        GLuint k3 = indices[i][2];
-
-        // positions of the old triangle
-        glm::vec3 a = positions[k1];
-        glm::vec3 b = positions[k2];
-        glm::vec3 c = positions[k3];
-
-        // starting indices
-        int const n_i = positions.size();
-
-        // compute the split points
-        glm::vec3 d = glm::normalize(0.5f * (a + b));
-        glm::vec3 e = glm::normalize(0.5f * (b + c));
-        glm::vec3 f = glm::normalize(0.5f * (c + a));
-
-        // add new positions to the model
-        add_pos(d);
-        add_pos(e);
-        add_pos(f);
-
-        triangle(k1, n_i + 0, n_i + 2);
-        triangle(k2, n_i + 1, n_i + 0);
-        triangle(k3, n_i + 2, n_i + 1);
-        triangle(n_i + 0, n_i + 1, n_i + 2);
-    };
-
-    for (size_t j = 0; j < 6; ++j)
+    for (int i = 1; i <= subdivision; ++i)
     {
-        new_indices.clear();
-        // loop over old triangles
-        for (int i = 0; i < indices.size(); ++i)
-            split_triangle(i);
-        indices = new_indices;
-    }
-}
+        // copy previous information
+        temp_vertices = vertices;
+        temp_indices = indices;
 
-void Icosphere::sort()
-{
-    std::sort(indices.begin(), indices.end(), [&](glm::uvec3 const &a, glm::uvec3 const &b) {
-        glm::vec3 const ap =
-            camera::view_projection * glm::vec4((positions[a.x] + positions[a.y] + positions[a.z]) / 3.0f, 1.0);
-        glm::vec3 const bp =
-            camera::view_projection * glm::vec4((positions[b.x] + positions[b.y] + positions[b.z]) / 3.0f, 1.0);
-        return ap.z > bp.z;
-    });
-    ind.fill(indices);
+        // clear previous information
+        vertices.clear();
+        indices.clear();
+
+        index = 0;
+        index_count = static_cast<int>(temp_indices.size());
+
+        for (int j = 0; j < index_count; j += 3)
+        {
+            // get 3 vertices and texture coordinates of a triangle
+            v1 = &temp_vertices[temp_indices[j] * 3];
+            v2 = &temp_vertices[temp_indices[j + 1] * 3];
+            v3 = &temp_vertices[temp_indices[j + 2] * 3];
+
+            // compute 3 new vertices by splitting half on each edge
+            //           v1
+            //          / \
+            //   newV1 *---* newV3
+            //        / \ / \
+            //      v2---*---v3
+            //         newV2
+
+            // split each edge in half and get 3 new vertices
+            compute_half_vertex(v1, v2, radius, new_v1);
+            compute_half_vertex(v2, v3, radius, new_v2);
+            compute_half_vertex(v1, v3, radius, new_v3);
+
+            // add 4 new triangles
+            add_vertices(v1, new_v1, new_v3);
+            add_vertices(v2, new_v2, v3);
+
+            //          0
+            //         / \
+            //        1---2
+            //       / \ / \
+            //      3---4---5
+
+            // track the new triangles
+            add_indices(index + 0, index + 1, index + 2);
+            add_indices(index + 1, index + 3, index + 4);
+            add_indices(index + 1, index + 4, index + 2);
+            add_indices(index + 4, index + 5, index + 2);
+
+            // next index
+            index += 6;
+        }
+    }
 }

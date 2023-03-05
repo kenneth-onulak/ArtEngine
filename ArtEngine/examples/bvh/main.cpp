@@ -13,17 +13,8 @@ int main(int argc, char *args[])
     // setup views
     setup();
 
-    //    camera::near = -100000;
-    //    camera::far = 100000;
-    //    camera::zoom_rate *= 1000;
-    //    camera::move_rate *= 100;
-    //    camera::position = glm::vec3(20, 10, 20);
-    //    camera::look = glm::vec3(0, 10, 0);
-    //    camera::init( 500, camera::camera_type::orthographic);
-
     // set handler functions
     Art::event.handler = eventHandler;
-    //    Art::event.handler = camera::handler;
     Art::view.interface = interfaceFunc;
 
     // load shader
@@ -37,14 +28,16 @@ int main(int argc, char *args[])
 
     // load debug objects
     Cube cube;
-    Model *sphere = object::load(path + "sphere_mid_poly");
+    Icosphere sphere(1, 3);
 
     // transform objects
     glm::vec3 translate(0, -43000, -35000);
     //    glm::vec3 translate(0, 0, 0);
     for (auto const &model : models)
-        model->model =
-            glm::translate(glm::mat4(1), translate); // * glm::scale(glm::mat4(glm::mat3(0.5f)), glm::vec3(1));
+        model->model = glm::translate(glm::mat4(1), translate);
+
+    // color value
+    int color_index = 0;
 
     // render scene
     Art::view.pipeline = [&]() {
@@ -53,9 +46,7 @@ int main(int argc, char *args[])
         // update shader lighting
         shader.use();
         shader.uniform("vp", proj * view);
-        //        shader.uniform("vp", camera::view_projection);
         shader.uniform("camera", pos);
-        //        shader.uniform("camera", camera::position);
         shader.uniform("pointlightpos", plightpos);
         shader.uniform("pointlightfar", pointfar);
         shader.uniform("pointlighton", on);
@@ -63,7 +54,7 @@ int main(int argc, char *args[])
         shader.uniform("brightness", brightness);
         shader.uniform("attenuation", attenuation);
 
-        // render models
+        // render models using diffuse rendering
         shader.uniform("renderbv", false);
         if (!use_single_bv)
             for (auto const &model : models)
@@ -77,12 +68,14 @@ int main(int argc, char *args[])
             models[model_index]->render(GL_TRIANGLES);
         }
 
-        // render bounding volumes
+        // reset color index and render bounding volumes
+        color_index = 0;
         shader.uniform("renderbv", true);
-        shader.uniform("bvcolor", bv_color);
         if (!use_single_bv)
             for (auto const &model : models)
             {
+                shader.uniform("bvcolor", colors[color_index % 7]);
+
                 if (use_aabb)
                 {
                     model->aabb.compute(bb_type);
@@ -95,17 +88,20 @@ int main(int argc, char *args[])
                 if (use_sphere)
                 {
                     model->sphere.compute(sphere_type);
-                    sphere->model =
-                        glm::translate(glm::mat4(1), model->sphere.center + translate) * //
-                        ((sphere_type == Sphere::sphere_type::ellipsoid) // choose corresponding scale matrix
-                             ? glm::scale(scale_matrix(model->sphere.scale), glm::vec3(1))
-                             : glm::scale(scale_matrix(model->sphere.radius), glm::vec3(1)));
-                    shader.uniform("model", sphere->model);
-                    sphere->render(GL_LINES);
+                    sphere.model = glm::translate(glm::mat4(1), model->sphere.center + translate) * //
+                                   ((sphere_type == Sphere::sphere_type::ellipsoid) // choose corresponding scale matrix
+                                        ? glm::scale(scale_matrix(model->sphere.scale), glm::vec3(1))
+                                        : glm::scale(scale_matrix(model->sphere.radius), glm::vec3(1)));
+                    shader.uniform("model", sphere.model);
+                    sphere.render(GL_LINES);
                 }
+
+                ++color_index;
             }
         if (use_single_bv)
         {
+            shader.uniform("bvcolor", colors[model_index % 7]);
+
             if (use_aabb)
             {
                 models[model_index]->aabb.compute(bb_type);
@@ -118,12 +114,12 @@ int main(int argc, char *args[])
             if (use_sphere)
             {
                 models[model_index]->sphere.compute(sphere_type);
-                sphere->model = glm::translate(glm::mat4(1), models[model_index]->sphere.center + translate) * //
-                                ((sphere_type == Sphere::sphere_type::ellipsoid) // choose corresponding scale matrix
-                                     ? glm::scale(scale_matrix(models[model_index]->sphere.scale), glm::vec3(1))
-                                     : glm::scale(scale_matrix(models[model_index]->sphere.radius), glm::vec3(1)));
-                shader.uniform("model", sphere->model);
-                sphere->render(GL_LINES);
+                sphere.model = glm::translate(glm::mat4(1), models[model_index]->sphere.center + translate) * //
+                               ((sphere_type == Sphere::sphere_type::ellipsoid) // choose corresponding scale matrix
+                                    ? glm::scale(scale_matrix(models[model_index]->sphere.scale), glm::vec3(1))
+                                    : glm::scale(scale_matrix(models[model_index]->sphere.radius), glm::vec3(1)));
+                shader.uniform("model", sphere.model);
+                sphere.render(GL_LINES);
             }
         }
     };

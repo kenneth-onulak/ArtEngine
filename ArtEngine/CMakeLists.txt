@@ -28,6 +28,8 @@ set( CMAKE_CXX_STANDARD 20 )           # C++ version
 set( EXAMPLE_DIR examples/bvh )    # bounding volume hierarchy
 #set( EXAMPLE_DIR examples/image )    # image
 #set( EXAMPLE_DIR examples/scene )    # scene
+#set( EXAMPLE_DIR examples/sphere_voronoi )    # voronoi sphere
+
 
 ################################################################################
 ################################### END EDIT ###################################
