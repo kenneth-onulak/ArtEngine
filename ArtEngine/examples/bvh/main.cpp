@@ -2,12 +2,14 @@
 #include "../../include/ArtEngine.h"
 
 #include "helpers.h"
+#include "bounding_volume_hierarchy.h"
 
 int main(int argc, char *args[])
 {
     // create window
     Art::view.vsync(true);
     Art::view.m_line_width = 2.0f;
+    Art::view.m_show_interface = true;
     Art::window("Bounding Volume Scene", 1200, 800);
 
     // setup views
@@ -23,7 +25,7 @@ int main(int argc, char *args[])
     // load multiple objects from a file
     std::string path = "object/";
     std::vector<Model *> models =
-        object::load_all({path + "Section4", path + "Section5", path + "Section6"}, color::silver);
+        object::load_all({path + "Section4"}, color::silver);
     model_size = models.size() - 1;
 
     // load debug objects
@@ -31,13 +33,46 @@ int main(int argc, char *args[])
     Icosphere sphere(1, 3);
 
     // transform objects
-    glm::vec3 translate(0, -43000, -35000);
+    glm::vec3 translate(0, -43000, -15000);
     //    glm::vec3 translate(0, 0, 0);
     for (auto const &model : models)
         model->model = glm::translate(glm::mat4(1), translate);
 
     // color value
     int color_index = 0;
+
+    std::function<void(bvh::Node **)> render_tree = [&](bvh::Node **tree) {
+        bvh::Node *node = *tree;
+        // base case
+        if (node == nullptr)
+            return;
+        // early out to render tree depths
+        if (node->depth > depth)
+            return;
+
+        shader.uniform("bvcolor", colors[node->depth % 7]);
+
+        if (use_aabb)
+        {
+            cube.model = glm::translate(glm::mat4(1), node->aabb.center + translate) * //
+                         node->aabb.T * // rotation matrix for obb, otherwise identity matrix
+                         glm::scale(scale_matrix(node->aabb.scale), glm::vec3(1));
+            shader.uniform("model", cube.model);
+            cube.render(GL_LINES);
+        }
+        if (use_sphere)
+        {
+            sphere.model = glm::translate(glm::mat4(1), node->sphere.center + translate) * //
+                           ((sphere_type == Sphere::sphere_type::ellipsoid) // choose corresponding scale matrix
+                                ? glm::scale(scale_matrix(node->sphere.scale), glm::vec3(1))
+                                : glm::scale(scale_matrix(node->sphere.radius), glm::vec3(1)));
+            shader.uniform("model", sphere.model);
+            sphere.render(GL_LINES);
+        }
+
+        render_tree(&node->left);
+        render_tree(&node->right);
+    };
 
     // render scene
     Art::view.pipeline = [&]() {
@@ -71,10 +106,11 @@ int main(int argc, char *args[])
         // reset color index and render bounding volumes
         color_index = 0;
         shader.uniform("renderbv", true);
-        if (!use_single_bv)
+        if (!use_single_bv && !use_bvh)
             for (auto const &model : models)
             {
                 shader.uniform("bvcolor", colors[color_index % 7]);
+                ++color_index;
 
                 if (use_aabb)
                 {
@@ -95,12 +131,10 @@ int main(int argc, char *args[])
                     shader.uniform("model", sphere.model);
                     sphere.render(GL_LINES);
                 }
-
-                ++color_index;
             }
-        if (use_single_bv)
+        if (use_single_bv && !use_bvh)
         {
-            shader.uniform("bvcolor", colors[model_index % 7]);
+            shader.uniform("bvcolor", color::lime);
 
             if (use_aabb)
             {
@@ -122,10 +156,39 @@ int main(int argc, char *args[])
                 sphere.render(GL_LINES);
             }
         }
+
+        if (use_bvh)
+        {
+            bb_type = AABB::bb_type::aabb;
+            sphere_type = Sphere::sphere_type::ritter;
+            // recompute aabb and ritter sphere for all models to use with bvh
+            for (auto &model : models)
+            {
+                model->aabb.compute(bb_type);
+                model->sphere.compute(sphere_type);
+            }
+            render_tree(bvh::tree);
+        }
     };
 
     Art::loop([&]() {
+        if(use_bvh)
+        {
+            if (!bvh::tree)
+            {
+                bvh::tree = new bvh::Node*;
 
+                if (use_bottom_up)
+                {
+                    bvh::bottom_up_bvh(bvh::tree, models);
+                    bvh::bottom_up_depth(*bvh::tree, 0);
+                }
+                else
+                {
+                    bvh::top_down_bvh(bvh::tree, models, 0, models.size() - 1, 0);
+                }
+            }
+        }
     });
 
     Art::quit();

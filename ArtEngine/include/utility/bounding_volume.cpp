@@ -160,9 +160,8 @@ std::pair<glm::vec3, glm::vec3> compute_min_max(std::vector<glm::vec3> const &v)
 AABB::AABB(glm::vec3 min, glm::vec3 max, bb_type type)
     : min(min)
     , max(max)
-    , center((min + max) * 0.5f)
+    , center((max + min) * 0.5f)
     , scale(max - center)
-    , T(glm::mat4(1))
     , type(type)
 {
 }
@@ -198,6 +197,24 @@ void AABB::compute(bb_type t)
     }
 
     is_dirty = false;
+}
+
+std::pair<float, float> AABB::get_extents(std::string axis) const
+{
+    std::pair<float, float> result;
+    if (axis == "x")
+        result = {min.x, max.x};
+    if (axis == "y")
+        result = {min.y, max.y};
+    if (axis == "z")
+        result = {min.z, max.z};
+    return result;
+}
+
+float AABB::surface_area() const
+{
+    glm::vec3 size = max - min;
+    return size.x * size.y + size.x * size.z + size.y * size.z;
 }
 
 void AABB::aabb(const std::vector<glm::vec3> &v)
@@ -323,6 +340,21 @@ Sphere::Sphere(glm::vec3 center, float radius, sphere_type type)
 {
 }
 
+void Sphere::enclose(glm::vec3 p)
+{
+    // compute distance to point (squared)
+    glm::vec3 dir = p - center;
+    float dist = glm::dot(dir, dir);
+    // do nothing if point is in sphere
+    if (dist < radius * radius)
+        return;
+    // point is outside sphere, update it
+    glm::vec3 d = glm::normalize(dir);
+    float new_radius = (glm::length(dir) + radius) * 0.5f;
+    center = center + (new_radius - radius) * d;
+    radius = new_radius;
+}
+
 void Sphere::compute(sphere_type t)
 {
     // only compute when a change occurs
@@ -367,19 +399,25 @@ void Sphere::compute(sphere_type t)
     is_dirty = false;
 }
 
-void Sphere::enclose(glm::vec3 p)
+std::pair<float, float> Sphere::get_extents(std::string axis) const
 {
-    // compute distance to point (squared)
-    glm::vec3 dir = p - center;
-    float dist = glm::dot(dir, dir);
-    // do nothing if point is in sphere
-    if (dist < radius * radius)
-        return;
-    // point is outside sphere, update it
-    glm::vec3 d = glm::normalize(dir);
-    float new_radius = (glm::length(dir) + radius) * 0.5f;
-    center = center + (new_radius - radius) * d;
-    radius = new_radius;
+    std::pair<float, float> result;
+    glm::vec3 min = center - glm::vec3(radius);
+    glm::vec3 max = center + glm::vec3(radius);
+
+    if (axis == "x")
+        result = {min.x, max.x};
+    if (axis == "y")
+        result = {min.y, max.y};
+    if (axis == "z")
+        result = {min.z, max.z};
+
+    return result;
+}
+
+float Sphere::surface_area() const
+{
+    return 4.0f * std::numbers::pi_v<float> * radius * radius;
 }
 
 std::pair<glm::vec3, glm::vec3> Sphere::extreme_points_along_direction(glm::vec3 d, const std::vector<glm::vec3> &v)
@@ -579,7 +617,6 @@ void Sphere::ellipsoid(const std::vector<glm::vec3> &v)
 {
     // compute aabb extremes
     std::pair<glm::vec3, glm::vec3> extremes = compute_min_max(v);
-
 
     // make ellipsoid encompass AABB
     static float scalar = sqrt(1.4f);

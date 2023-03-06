@@ -15,7 +15,9 @@ struct AABB
     AABB(glm::vec3 min, glm::vec3 max, bb_type type = bb_type::aabb);
 
     void compute(bb_type t);
-    std::pair<float, float> get_extents(std::string axis);
+
+    std::pair<float, float> get_extents(std::string axis) const;
+    float surface_area() const;
 
     glm::vec3 min;                //!< min point position
     glm::vec3 max;                //!< max point position
@@ -49,8 +51,11 @@ struct Sphere
     Sphere() = default;
     Sphere(glm::vec3 center, float radius, sphere_type type = sphere_type::centroid);
 
+    void enclose(glm::vec3 p);
     void compute(sphere_type t);
-    std::pair<float, float> get_extents(std::string axis);
+
+    std::pair<float, float> get_extents(std::string axis) const;
+    float surface_area() const;
 
     sphere_type type = sphere_type::centroid; //!< current type of sphere
     glm::vec3 center;                         //!< center position
@@ -61,7 +66,6 @@ struct Sphere
     Model *model = nullptr; //!< pointer to the model to access vertex info
 
   private:
-    void enclose(glm::vec3 p);
     std::pair<glm::vec3, glm::vec3> extreme_points_along_direction(glm::vec3 d, std::vector<glm::vec3> const &v);
     std::pair<glm::vec3, glm::vec3> extreme_points_along_xyz(std::vector<glm::vec3> const &v);
 

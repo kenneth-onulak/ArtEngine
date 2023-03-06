@@ -84,6 +84,8 @@ struct Gizmo : public Model
     Gizmo();
 };
 
+// Icosphere inspired by Song Ho
+// source: https://www.songho.ca/opengl/gl_sphere.html
 struct Icosphere : public Model
 {
     Icosphere(float radius, int subdivisions);

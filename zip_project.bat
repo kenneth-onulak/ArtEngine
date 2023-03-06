@@ -1,0 +1,2 @@
+@echo off
+zip -r CS350_kenneth.onulakjr_#.zip ArtEngine README.md -x "ArtEngine/.idea/*" -x "ArtEngine/cmake*/*" -x "ArtEngine/examples/bvh/object/pp*/*" -x "ArtEngine/examples/empty/*" -x "ArtEngine/examples/image/*" -x "ArtEngine/examples/scene/*" -x "ArtEngine/examples/sphere_voronoi/*" -x "ArtEngine/examples/voronoi/*" -x "ArtEngine/examples/colliding_balls/*" 

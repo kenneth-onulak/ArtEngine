@@ -354,7 +354,7 @@ void Icosphere::subdivide()
             compute_half_vertex(v2, v3, radius, new_v2);
             compute_half_vertex(v1, v3, radius, new_v3);
 
-            // add 4 new triangles
+            // add new vertices
             add_vertices(v1, new_v1, new_v3);
             add_vertices(v2, new_v2, v3);
 
@@ -364,7 +364,7 @@ void Icosphere::subdivide()
             //       / \ / \
             //      3---4---5
 
-            // track the new triangles
+            // add 4 new triangles
             add_indices(index + 0, index + 1, index + 2);
             add_indices(index + 1, index + 3, index + 4);
             add_indices(index + 1, index + 4, index + 2);
