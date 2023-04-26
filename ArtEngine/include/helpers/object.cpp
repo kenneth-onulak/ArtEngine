@@ -221,6 +221,9 @@ Model *load(std::string file, glm::vec3 color)
     model->sphere.center = center;
     model->sphere.radius = distance;
     model->sphere.model = model;
+    // copy color info
+    model->color.resize(model->size);
+    model->buffers["in_Color"]->retrieve(model->color);
 
     return model;
 }

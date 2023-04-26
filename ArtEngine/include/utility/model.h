@@ -21,6 +21,8 @@ struct Model
     std::unordered_map<std::string, Buffer *> buffers; //!< owned buffers
     std::string name;                                  //!< model name
 
+    std::vector<glm::vec4> color; //!< USED ONLY FOR BSP
+
     // boundary information
     AABB aabb{};
     Sphere sphere{};
@@ -43,6 +45,13 @@ struct Point : public Model
     Buffer vertex;
 
     Point();
+};
+
+struct Line : public Model
+{
+    Buffer vertex;
+
+    Line(glm::vec3 const &p0, glm::vec3 const &p1);
 };
 
 struct Triangle : public Model

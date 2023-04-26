@@ -83,10 +83,12 @@ bool View::init(std::string window_name, int width, int height)
     // setup ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     m_io = ImGui::GetIO();
     ImGui_ImplSDL2_InitForOpenGL(m_window, m_context);
     ImGui_ImplOpenGL3_Init("#version 330");
     ImGui::StyleColorsDark();
+    ImPlot::StyleColorsDark();
 
     if (m_anti_alias)
         glEnable(GL_MULTISAMPLE);

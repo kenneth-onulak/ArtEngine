@@ -1,9 +1,16 @@
-# Bounding Volumes
+# 3D Interpolating Cubic Spline
 
 - Kenneth Onulak Jr.
 - kenneth.onulakjr@digipen.edu
-- CS350S23A Project 2
-- Hours Spent - 52
+- MAT300 Project 8 - 3D version of Project 4
+- Hours Spent: 3  
+
+Illustrates how a interpolating cubic spline can be created using standard basis spline functions, truncated power functions and Gauss Elimination to form the cubic spline.  
+
+### Info:
+- The `Release` folder contains the executable and necessary dlls.  
+- The `ArtEngine` folder contains the source code.
+- Third party libraries / dependencies are not included and will need to be installed to build.
 
 ### Installing Dependencies:
 #### vcpkg
@@ -11,7 +18,8 @@ Follow the instructions at https://docs.microsoft.com/en-us/cpp/build/vcpkg?view
 
 Make sure to follow the integration instructions at https://docs.microsoft.com/en-us/cpp/build/vcpkg?view=msvc-160#installation on a per-user basis so that include paths are resolved automagically.
 
-The following packages need to be installed to compile.
+The following packages need to be installed to build and compile.  
+
 #### SDL2
     ./vcpkg install sdl2:x64-windows
     ./vcpkg install sdl2-image:x64-windows
@@ -33,96 +41,44 @@ The following packages need to be installed to compile.
 #### Freetype
     ./vcpkg install freetype:x64-windows
 
+#### Imgui
+    ./vcpkg install imgui:x64-windows
+
+#### Implot
+    ./vcpkg install implot:x64-windows
+
 ### Build:
-NOTE: You must set `-DCMAKE_TOOLCHAIN_FILE` for vcpkg. Such as the following where you just need to change `{PATH TO VCPKG}` to match your local vcpkg directory.
-```
--DCMAKE_TOOLCHAIN_FILE={PATH TO VCPKG}/scripts/buildsystems/vcpkg.cmake
-```
+NOTE: You must set `-DCMAKE_TOOLCHAIN_FILE` for vcpkg. Such as the following where you just need to change `{PATH TO VCPKG}` to match your local vcpkg directory.  
+
+    -DCMAKE_TOOLCHAIN_FILE={PATH TO VCPKG}/scripts/buildsystems/vcpkg.cmake
+
 - Built using C++ 20
 - Compiled with MSVC CMake in CLion on Windows
 
-### How to Use:
-Automatically loads models from power plant section text files
-- Expects the following file structure to automatically load files
-- NOTE: Missing ppsection(s) folder(s) from submission to omit obj files
-```
-- examples
-    - bvh
-        - object
-            - ppsection4 // omitted from submission
-            - ppsection5 // omitted from submission
-            - ppsection6 // omitted from submission
-            - Section4.txt
-            - Section5.txt
-            - Section6.txt
-```
-
 ### Controls:
-- WASD to move / rotate camera around objects
-- Shift / Space to rotate the camera up and down
+- WASD to rotate / zoom camera around objects
 - Esc to toggle the imgui interface
+
+### How To Use:
+Left click inside a plot plane ("XY", "XZ", or "YZ") to place a 3D point.  
+Left click and drag a point inside the plot plane to move it.  
+NOTE: There can only be 21 control points at one time, adding additional points after 21 will remove from the beginning of the curve to add to the end.  
 
 ### Directory File Structure:
 ```
 - ArtEngine
-    - examples // project files
-        - bvh
+    - examples
+        - cubic_spline        // contains all project files
             - object
-                - ppsection(s)
-                - Section#.txt
             - shader
-                - default.fs / cs
-            - ... // other project files
+                - default.fs
+                - default.vs
+            - cubic_spline.h
+            - main.cpp
+            - settings.h
     - include
         - ... // all engine source files
 ```
 
-### Implementation
-Parts Completed (100%)
-- Scene Setup
-  - Objects loaded from text file
-  - Diffuse colored model
-- Bounding Volumes
-  - AABB
-  - OBB - see note near bottom
-  - Bounding Sphere
-    - Centroid
-    - Ritter's
-    - Larsson's
-      - EPOC-6
-      - EPOC-14
-      - EPOC-26
-      - EPOC-98
-    - PCA
-  - Ellipsoid
-- Bounding Volume Heirarchy
-  - Top-Down construction
-    - AABB
-    - Bounding Sphere (Ritter's)
-  - Bottom-Up construction
-    - AABB
-    - Bounding Sphere (Ritter's)
-- Interactivity
-  - Toggle/Change Bounding Volumes
-  - Display Bounding Volumes in Wireframe
-  - Camera
-
 ### About
-Engine is modeled after TinyEngine. 
-
-Colours for Tree Depth:
-- 0 - Red
-- 1 - Orange
-- 2 - Yellow
-- 3 - Lime
-- 4 - Cyan
-- 5 - Magenta
-- 6 - White
-
-Note about OBB:
-- Unfortunately, if the points are not well distributed the box may not be a tight fit. The reason for this is that variations in point sampling density can skew the eigenvectors of the covariance matrix and result in a poor orientation being found. A way to improve this sampling would be to use a covariance matrix that uses the surface area of each triangle instead. 
-
-Bottom-up tree heuristic:
-- Nearest neighbor weight will create a tree with more clustered nodes.
-- Combined volume weight will create a tree with smaller nodes.
-- Relative weight increase will create a tree that have smaller parents compared to children.
+Engine is modeled after TinyEngine.

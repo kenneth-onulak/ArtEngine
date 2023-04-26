@@ -79,6 +79,10 @@
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+// ImPlot
+#include <implot.h>
+#include <implot_internal.h>
+
 using Handle = std::function<void()>;
 
 // engine files

@@ -25,10 +25,12 @@ set( CMAKE_CXX_STANDARD 20 )           # C++ version
 
 #set( EXAMPLE_DIR examples/empty )    # empty - duplicate this project to start a new one
 
-set( EXAMPLE_DIR examples/bvh )    # bounding volume hierarchy
-#set( EXAMPLE_DIR examples/image )    # image
-#set( EXAMPLE_DIR examples/scene )    # scene
-#set( EXAMPLE_DIR examples/sphere_voronoi )    # voronoi sphere
+#set( EXAMPLE_DIR examples/bvh )                 # bounding volume hierarchy
+#set( EXAMPLE_DIR examples/space_partitioning )  # bounding volume hierarchy
+#set( EXAMPLE_DIR examples/image )               # image
+#set( EXAMPLE_DIR examples/scene )               # scene
+set( EXAMPLE_DIR examples/cubic_spline )         # cubic splines
+#set( EXAMPLE_DIR examples/sphere_voronoi )      # voronoi sphere
 
 
 ################################################################################
@@ -52,6 +54,7 @@ find_package( sdl2-image CONFIG REQUIRED )
 find_package( Freetype REQUIRED )
 find_package( Boost REQUIRED COMPONENTS filesystem )
 find_package( imgui CONFIG REQUIRED )
+find_package( implot CONFIG REQUIRED )
 
 ################################################################################
 # add the executable with all globbed files (project and engine)
@@ -69,6 +72,7 @@ target_link_libraries( ${PROJECT} PRIVATE
                        Freetype::Freetype
                        Boost::boost Boost::filesystem
                        imgui::imgui
+                       implot::implot
                        )
 
 ################################################################################
