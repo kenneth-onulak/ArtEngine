@@ -1,2 +1,0 @@
-@echo off
-zip -r MAT300_kenneth.onulakjr_8.zip ArtEngine Release README.md -x "ArtEngine/.idea/*" -x "ArtEngine/cmake*/*" -x "ArtEngine/examples/empty/*" -x "ArtEngine/examples/image/*" -x "ArtEngine/examples/scene/*" -x "ArtEngine/examples/sphere_voronoi/*" -x "ArtEngine/examples/voronoi/*" -x "ArtEngine/examples/colliding_balls/*" -x "ArtEngine/examples/bvh/*" -x "ArtEngine/examples/space_partitioning/*" 
