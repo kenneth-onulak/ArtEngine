@@ -1,14 +1,11 @@
-# 3D Interpolating Cubic Spline
+# Art Engine
 
 - Kenneth Onulak Jr.
 - kenneth.onulakjr@digipen.edu
-- MAT300 Project 8 - 3D version of Project 4
-- Hours Spent: 3  
-
-Illustrates how a interpolating cubic spline can be created using standard basis spline functions, truncated power functions and Gauss Elimination to form the cubic spline.  
+- Exploratory Engine framework for completing DigiPen course work.
 
 ### Info:
-- The `Release` folder contains the executable and necessary dlls.  
+- The `Release` folder contains an example executable and necessary dlls.  
 - The `ArtEngine` folder contains the source code.
 - Third party libraries / dependencies are not included and will need to be installed to build.
 
@@ -54,15 +51,7 @@ NOTE: You must set `-DCMAKE_TOOLCHAIN_FILE` for vcpkg. Such as the following whe
 
 - Built using C++ 20
 - Compiled with MSVC CMake in CLion on Windows
-
-### Controls:
-- WASD to rotate / zoom camera around objects
-- Esc to toggle the imgui interface
-
-### How To Use:
-Left click inside a plot plane ("XY", "XZ", or "YZ") to place a 3D point.  
-Left click and drag a point inside the plot plane to move it.  
-NOTE: There can only be 21 control points at one time, adding additional points after 21 will remove from the beginning of the curve to add to the end.  
+- While not tested extensively, nothing should prevent the framework from compiling on Linux should the necessary dependencies be installed and linked properly. 
 
 ### Directory File Structure:
 ```
@@ -78,7 +67,10 @@ NOTE: There can only be 21 control points at one time, adding additional points 
             - settings.h
     - include
         - ... // all engine source files
+    - CMakeLists.txt // modify the EXAMPLE_DIR to build a different project
 ```
 
 ### About
-Engine is modeled after TinyEngine.
+This engine was created to learn more about Graphics Programming and used to complete my graphics course work at DigiPen. This is a learning environment modeled after TinyEngine for practicing engine and system design.  
+
+The goal of this framework is to act as an intuitive wrapper for OpenGL, allowing for quick and easy deployment of 2D and 3D visuals. I wanted something easily adaptable to any project I was required to create utilizing user-defined behaviors passed to the base framework.  
