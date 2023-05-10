@@ -34,3 +34,6 @@
 # CLion
 ArtEngine/.idea/
 ArtEngine/cmake*
+
+# Personal files
+/ignore
