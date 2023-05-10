@@ -37,3 +37,12 @@ ArtEngine/cmake*
 
 # Personal files
 /ignore
+
+# Examples
+ArtEngine/examples/bvh
+ArtEngine/examples/colliding_balls
+ArtEngine/examples/empty
+ArtEngine/examples/image
+ArtEngine/examples/scene
+ArtEngine/examples/sphere_voronoi
+ArtEngine/examples/voronoi
